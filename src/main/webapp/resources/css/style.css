@@ -68,6 +68,13 @@ fieldset[disabled] .btn-webifier.active {
     height: 256px;
 }
 
+.footer {
+    margin-top: 16rem;
+    padding-top: 1.5rem;
+    color: #777;
+    border-top: .05rem solid #e5e5e5;
+}
+
 @media (max-width: 767px) {
     .webifier-logo {
         margin-top: 3rem;
@@ -83,5 +90,9 @@ fieldset[disabled] .btn-webifier.active {
         margin-bottom: 2rem;
         width: 128px;
         height: 128px;
+    }
+
+    .footer {
+        margin-top: 8rem;
     }
 }

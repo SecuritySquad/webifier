@@ -6,19 +6,28 @@
         <meta name="mobile-web-app-capable" content="yes"/>
         <meta name="apple-mobile-web-app-capable" content="yes"/>
     </th:block>
-    <th:block th:fragment="favicon">
+    <th:block th:fragment="mainhead">
+        <title>webifier</title>
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{img/webifier.png}"/>
+    </th:block>
+    <th:block th:fragment="head(name)">
+        <title th:text="'webifier - ' + ${name}"></title>
         <link rel="shortcut icon" type="image/x-icon" th:href="@{img/webifier.png}"/>
     </th:block>
     <th:block th:fragment="css">
+        <link rel="stylesheet" href="lib/tether/dist/css/tether.min.css"/>
         <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="lib/components-font-awesome/css/font-awesome.min.css"/>
         <link rel="stylesheet" href="css/style.css"/>
     </th:block>
     <th:block th:fragment="js">
+        <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="lib/tether/dist/js/tether.min.js"></script>
+        <script type="text/javascript" src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    </th:block>
+    <th:block th:fragment="js-result">
         <script type="text/javascript" src="lib/sockjs/sockjs.min.js"></script>
         <script type="text/javascript" src="lib/stomp-websocket/lib/stomp.min.js"></script>
-        <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
-        <script type="text/javascript" src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
     </th:block>
 </head>
 </html>

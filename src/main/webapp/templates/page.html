@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <th:block th:fragment="nav">
+        <nav class="navbar navbar-light bg-faded">
+            <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+            <div class="collapse navbar-toggleable-xs" id="navbarResponsive">
+                <a class="navbar-brand" href="/">
+                    <img src="img/webifier.png" width="30" height="30" class="d-inline-block align-top" alt="webifier"/>
+                    webifier
+                </a>
+                <ul class="nav navbar-nav float-sm-right">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="themeLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Theme
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="#themeLink">
+                            <a class="dropdown-item" href="#">Default</a>
+                            <a class="dropdown-item" href="#">Dark</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Language
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="#languageLink">
+                            <a class="dropdown-item" href="#">English</a>
+                            <a class="dropdown-item" href="#">German</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </th:block>
+    <th:block th:fragment="footer">
+        <footer class="container footer text-xs-center">
+            <p>© <a target="_blank" href="https://www.securitysquad.de">SecuritySquad</a> 2016</p>
+        </footer>
+    </th:block>
+</body>
+</html>

@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <th:block th:replace="head :: meta"></th:block>
+    <th:block th:replace="head :: head(name=${'result'})"></th:block>
+    <th:block th:replace="head :: css"></th:block>
+    <th:block th:replace="head :: js"></th:block>
+    <th:block th:replace="head :: js-result"></th:block>
 </head>
 <body>
+<th:block th:replace="page :: nav"></th:block>
 
+<div class="container mt-3">
+    <p>Checking <span th:text="${url}"></span></p>
+</div>
+
+<th:block th:replace="page :: footer"></th:block>
 </body>
 </html>
