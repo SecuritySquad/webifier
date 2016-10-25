@@ -1,0 +1,16 @@
+{
+  "name": "webifier",
+  "version": "0.0.1",
+  "homepage": "http://webifier.de/",
+  "authors": [
+    "djbrown",
+    "jockelmore",
+    "samuel-p"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.5",
+    "components-font-awesome": "~4.5.0",
+    "sockjs": "~0.3.4",
+    "stomp-websocket": "~2.3.4"
+  }
+}

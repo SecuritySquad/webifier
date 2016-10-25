@@ -1,0 +1,21 @@
+# java
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# intellij
+.idea
+*.iml
+out
+gen
+
+# gradle
+gradle/
+.gradle
+build/
+.gradletasknamecache
+
+# bower components
+/src/main/webapp/static/

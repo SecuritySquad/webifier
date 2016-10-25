@@ -1,0 +1,87 @@
+.btn-webifier {
+    color: #000000;
+    background-color: #FFA300;
+    border-color: #FF8800;
+}
+
+.btn-webifier:hover,
+.btn-webifier:focus,
+.btn-webifier:active,
+.btn-webifier.active,
+.open .dropdown-toggle.btn-webifier {
+    color: #000000;
+    background-color: #FF9500;
+    border-color: #FF8800;
+}
+
+.btn-webifier:active,
+.btn-webifier.active,
+.open .dropdown-toggle.btn-webifier {
+    background-image: none;
+}
+
+.btn-webifier.disabled,
+.btn-webifier[disabled],
+fieldset[disabled] .btn-webifier,
+.btn-webifier.disabled:hover,
+.btn-webifier[disabled]:hover,
+fieldset[disabled] .btn-webifier:hover,
+.btn-webifier.disabled:focus,
+.btn-webifier[disabled]:focus,
+fieldset[disabled] .btn-webifier:focus,
+.btn-webifier.disabled:active,
+.btn-webifier[disabled]:active,
+fieldset[disabled] .btn-webifier:active,
+.btn-webifier.disabled.active,
+.btn-webifier[disabled].active,
+fieldset[disabled] .btn-webifier.active {
+    background-color: #FFA300;
+    border-color: #FF8800;
+}
+
+.btn-webifier .badge {
+    color: #FFA300;
+    background-color: #000000;
+}
+
+.input-webifier-search {
+    border-color: #FF8800 !important;
+}
+
+.input-webifier-search:hover {
+    -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+.input-webifier-search:focus,
+.input-webifier-search:active {
+    -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.webifier-logo {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    width: 256px;
+    height: 256px;
+}
+
+@media (max-width: 767px) {
+    .webifier-logo {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+        width: 192px;
+        height: 192px;
+    }
+}
+
+@media (max-width: 575px) {
+    .webifier-logo {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        width: 128px;
+        height: 128px;
+    }
+}
