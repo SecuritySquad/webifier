@@ -12,10 +12,10 @@ out
 gen
 
 # gradle
-gradle/
+!gradle-wrapper.jar
 .gradle
 build/
 .gradletasknamecache
 
 # bower components
-/src/main/webapp/static/
+/src/main/webapp/static/*
