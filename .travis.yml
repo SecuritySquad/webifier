@@ -1,0 +1,49 @@
+# configuration file for TravisCI
+# Notes:
+#  - you can skip a build by adding [ci skip] to the commit message
+
+# see http://about.travis-ci.org/docs/user/languages/java/
+language: java
+
+# test for these JDK versions and environments
+jdk:
+   - oraclejdk8
+
+# only build these branches (RegEx is also valid, eg. /^deploy.*$/):
+branches:
+  only:
+    - master
+    - dev
+
+# container-based build:
+sudo: false
+
+#
+notifications:
+  email:
+    - team@securitysquad.de
+
+services:
+  - mongodb
+
+#before_install:
+
+#before_script:
+#  - sleep 15
+
+# Run Integration tests
+script:
+  - ./gradlew test
+
+#after_script:
+
+#after_success:
+#  - ./deploy.sh
+
+#after_failure:
+
+#before_deploy:
+
+#deploy:
+
+#after_deploy:

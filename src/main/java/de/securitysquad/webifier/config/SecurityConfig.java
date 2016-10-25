@@ -13,7 +13,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-                .antMatchers("/js/**", "/css/**", "/img/**", "/lib/**", "/").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/js/**", "/css/**", "/img/**", "/lib/**", "/", "/check").permitAll()
+                .anyRequest().denyAll();
     }
 }
