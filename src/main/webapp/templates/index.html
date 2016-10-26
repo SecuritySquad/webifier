@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="head :: meta"></th:block>
-    <th:block th:replace="head :: mainhead"></th:block>
-    <th:block th:replace="head :: css"></th:block>
-    <th:block th:replace="head :: js"></th:block>
+    <th:block th:replace="head :: meta"/>
+    <th:block th:replace="head :: mainhead"/>
+    <th:block th:replace="head :: css"/>
+    <th:block th:replace="head :: js"/>
+    <th:block th:replace="head :: js-main"/>
 </head>
 <body>
-<th:block th:replace="page :: nav"></th:block>
+<th:block th:replace="page :: nav"/>
 <div class="container">
     <div class="row">
         <div class="col-md-4 offset-md-4">
             <img class="webifier-logo mx-auto d-block" src="img/webifier.png" alt="webifier"/>
         </div>
     </div>
+    <div id="url-error-container" th:if="${#strings.equals('url_invalid', error)}" class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="alert alert-danger" role="alert">
+                <strong>Please enter a valid domain!</strong>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <form action="/check" method="post">
+            <form id="webifier-search" action="/check" method="post">
                 <div class="input-group input-group-lg">
                     <input type="text" name="url" class="form-control input-webifier-search"
-                           placeholder="www.example.com"/>
+                           placeholder="www.example.com" autofocus="autofocus"/>
                     <span class="input-group-btn">
                         <button class="btn btn-webifier" type="submit"><span class="fa fa-search"></span></button>
                     </span>
@@ -29,6 +37,6 @@
     </div>
 </div>
 
-<th:block th:replace="page :: footer"></th:block>
+<th:block th:replace="page :: footer"/>
 </body>
 </html>

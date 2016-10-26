@@ -1,24 +1,65 @@
 package de.securitysquad.webifier.web.controller;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Created by samuel on 25.10.16.
  */
 @Controller
 public class WebifierController {
+
+
     @RequestMapping("/")
-    public String returnIndexView() {
-        return "index";
+    public ModelAndView returnIndexView(HttpSession session) {
+        ModelAndView result = new ModelAndView("index");
+        Object error = session.getAttribute("error");
+        if (error != null) {
+            result.addObject("error", error);
+            session.removeAttribute("error");
+        }
+        return result;
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public ModelAndView returnResultView(@RequestParam String url) {
-        // TODO validate url
+    public String redirectResultView(@RequestParam("url") String urlParameter, HttpSession session) {
+        UrlValidator validator = new UrlValidator(new String[]{"http", "https"});
+        String urlWithProtocol = withProtocol(urlParameter);
+        if (validator.isValid(urlWithProtocol)) {
+            try {
+                URL url = new URL(urlWithProtocol);
+                session.setAttribute("url", url);
+                // TODO trigger check
+                return "redirect:/checked";
+            } catch (MalformedURLException e) {
+                // url is invalid
+            }
+        }
+        session.setAttribute("error", "url_invalid");
+        return "redirect:/";
+    }
+
+    private String withProtocol(String url) {
+        if (url.matches("^https?://.*")) {
+            return url;
+        }
+        return "http://" + url;
+    }
+
+    @RequestMapping(value = "/checked")
+    public ModelAndView returnResultView(HttpSession session) {
+        Object url = session.getAttribute("url");
+        if (url == null) {
+            return new ModelAndView("redirect:/");
+        }
         ModelAndView result = new ModelAndView("result");
         result.addObject("url", url);
         return result;
