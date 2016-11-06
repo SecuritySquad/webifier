@@ -1,5 +1,6 @@
 package de.securitysquad.webifier.web.controller;
 
+import de.securitysquad.webifier.config.WebifierConstants;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,14 +11,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.UUID;
 
 /**
  * Created by samuel on 25.10.16.
  */
 @Controller
 public class WebifierController {
-
-
     @RequestMapping("/")
     public ModelAndView returnIndexView(HttpSession session) {
         ModelAndView result = new ModelAndView("index");
@@ -36,7 +36,8 @@ public class WebifierController {
         if (validator.isValid(urlWithProtocol)) {
             try {
                 URL url = new URL(urlWithProtocol);
-                session.setAttribute("url", url);
+                session.setAttribute(WebifierConstants.Session.CHECK_URL, url.toString());
+                session.setAttribute(WebifierConstants.Session.CHECK_ID, UUID.randomUUID().toString());
                 // TODO trigger check
                 return "redirect:/checked";
             } catch (MalformedURLException e) {
@@ -56,12 +57,14 @@ public class WebifierController {
 
     @RequestMapping(value = "/checked")
     public ModelAndView returnResultView(HttpSession session) {
-        Object url = session.getAttribute("url");
-        if (url == null) {
+        Object id = session.getAttribute(WebifierConstants.Session.CHECK_ID);
+        Object url = session.getAttribute(WebifierConstants.Session.CHECK_URL);
+        if (id == null || url == null) {
             return new ModelAndView("redirect:/");
         }
         ModelAndView result = new ModelAndView("result");
-        result.addObject("url", url);
+        result.addObject("check_url", url);
+        result.addObject("check_id", id);
         return result;
     }
 }
