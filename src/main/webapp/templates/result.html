@@ -6,14 +6,26 @@
     <th:block th:replace="head :: css"/>
     <th:block th:replace="head :: js"/>
     <th:block th:replace="head :: js-result"/>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        header = {
+            checkUrl: /*[[${check_url}]]*/ null,
+            checkId: /*[[${check_id}]]*/ null
+        };
+        var headerName = /*[[${_csrf.headerName}]]*/ null;
+        header[headerName] = /*[[${_csrf.token}]]*/ null;
+        /*]]>*/
+    </script>
 </head>
 <body>
 <th:block th:replace="page :: nav"/>
 
 <div class="container mt-3">
-    <p><i th:text="${url}"></i> checked.</p>
+    <p><i th:text="${check_url}"></i> checked.</p>
 </div>
 
 <th:block th:replace="page :: footer"/>
+
+<script type="text/javascript" src="js/check.js"></script>
 </body>
 </html>

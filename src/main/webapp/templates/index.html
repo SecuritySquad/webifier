@@ -24,7 +24,7 @@
     </div>
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <form id="webifier-search" action="/check" method="post">
+            <form id="webifier-search" th:action="@{/check}" method="post">
                 <div class="input-group input-group-lg">
                     <input type="text" name="url" class="form-control input-webifier-search"
                            placeholder="www.example.com" autofocus="autofocus"/>
