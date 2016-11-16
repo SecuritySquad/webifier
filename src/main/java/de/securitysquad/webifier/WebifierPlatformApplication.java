@@ -10,9 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan("de.securitysquad.webifier")
-public class WebifierApplication {
+public class WebifierPlatformApplication {
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(WebifierApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(WebifierPlatformApplication.class, args);
         context.registerShutdownHook();
     }
 }

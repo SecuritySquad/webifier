@@ -96,3 +96,31 @@ fieldset[disabled] .btn-webifier.active {
         margin-top: 8rem;
     }
 }
+.state {
+    margin-bottom: 1rem;
+}
+
+.state .card-header {
+    text-align: center;
+    background-color: #444444;
+    padding: 10px;
+}
+
+.state .card-header img {
+    width: 64px;
+    height: 64px;
+}
+
+.card-header a {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+.card-header h5 {
+    padding: 5px 0;
+}
+
+.test-state {
+    width: 32px;
+    height: 32px;
+}

@@ -56,18 +56,18 @@ dependencies {
 }
 
 jar {
-    baseName = 'webifier'
+    baseName = 'webifier-platform'
     version = '0.0.1-SNAPSHOT'
     manifest {
-        attributes "Main-Class": "de.securitysquad.webifier.WebifierApplication"
+        attributes "Main-Class": "de.securitysquad.webifier.WebifierPlatformApplication"
     }
 }
 
 task buildAll(type: Jar) {
-    baseName = project.name + "-all"
-    version = project.version
+    baseName = 'webifier-platform-all'
+    version = '0.0.1-SNAPSHOT'
     manifest {
-        attributes "Main-Class": "de.saphijaga.spoozer.SpoozerApplication"
+        attributes "Main-Class": "de.securitysquad.webifier.WebifierPlatformApplication"
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar

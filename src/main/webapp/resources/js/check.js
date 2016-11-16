@@ -3,16 +3,70 @@
  */
 var stomp = Stomp.over(new SockJS('/connect'));
 stomp.debug = function (args) {
-    // console.log(args);
+    console.log(args);
 };
 stomp.connect(header, function (frame) {
     console.log(frame);
-    stomp.subscribe('/user/checked', function (payload, headers, res) {
+    stomp.subscribe('/user/check', function (payload, headers, res) {
         console.log(payload);
-        if (!payload) {
-            location.reload();
+        var event = JSON.parse(payload.body);
+        if (event.message) {
+            $('#log').append('</br>' + event.message);
         }
+        executeEvent(event);
     }, header);
 }, function (err) {
     console.error('connection error:' + err);
 });
+
+function executeEvent(event) {
+    switch (event.typ) {
+        case 'TesterFinished':
+            setResultMalicious(event.malicious);
+            break;
+        case 'TestFinishedWithResult':
+        case 'TestFinishedWithError':
+            setTestResult(event);
+            break;
+        default:
+            break;
+    }
+}
+
+function setTestResult(event) {
+    switch (event.test_name) {
+        case 'VirusScan':
+            setVirusScanResult(event.result);
+            break;
+        default:
+            break;
+    }
+}
+
+function setVirusScanResult(result) {
+    setResultMaliciousImage($('#virusscan-state'), result.malicious);
+    $('#virusscan-placeholder').addClass('invisible');
+    $('#virusscan-info').html('Geprüfte Dateien: ' + result.info.scanned_files + '</br>Infizierte Dateien gefunden: ' + result.info.malicious_files).removeClass('invisible');
+    var files = result.info.files;
+    for (var i = 0; i < files.length; i++) {
+        $('#virusscan-result').append('<tr' + (files[i].malicious ? ' class="table-danger"' : '') + '><td>' + files[i].name + '</td><td><span class="fa fa-' + (files[i].malicious ? 'exclamation-circle text-danger' : 'check-circle text-success') + '"></span></td></tr>');
+    }
+    $('#virusscan-result').removeClass('invisible');
+}
+
+function setResultMaliciousImage(element, malicious) {
+    if (malicious) {
+        element.attr('src', 'img/error.png');
+    } else {
+        element.attr('src', 'img/success.png');
+    }
+}
+
+function setResultMalicious(malicious) {
+    $('#heading-log').css('background-color', '#f5f5f5');
+    if (malicious) {
+        $('#test-state').attr('src', 'img/webifier-error.png');
+    } else {
+        $('#test-state').attr('src', 'img/webifier-success.png');
+    }
+}

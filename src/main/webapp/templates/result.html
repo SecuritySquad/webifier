@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="head :: meta"/>
-    <th:block th:replace="head :: head(name=${'result'})"/>
-    <th:block th:replace="head :: css"/>
-    <th:block th:replace="head :: js"/>
-    <th:block th:replace="head :: js-result"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title>webifier - result</title>
+    <link rel="shortcut icon" type="image/x-icon" href="img/webifier.png"/>
+
+    <link rel="stylesheet" href="lib/tether/dist/css/tether.min.css"/>
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="lib/components-font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+
+    <script type="text/javascript" src="lib/sockjs/sockjs.min.js"></script>
+    <script type="text/javascript" src="lib/stomp-websocket/lib/stomp.min.js"></script>
+
     <script th:inline="javascript">
         /*<![CDATA[*/
         header = {
@@ -21,11 +31,87 @@
 <th:block th:replace="page :: nav"/>
 
 <div class="container mt-3">
-    <p><i th:text="${check_url}"></i> checked.</p>
+    <h3 th:text="${check_url}"></h3>
+    <div class="card state">
+        <div class="card-header" id="heading-log">
+            <a data-toggle="collapse" href="#collapse-log" aria-expanded="false"
+               aria-controls="collapse-log">
+                <div class="mb-0">
+                    <img id="test-state" src="img/webifier-loading.gif" alt="loading..."/>
+                </div>
+            </a>
+        </div>
+        <div id="collapse-log" class="collapse" aria-labelledby="heading-log">
+            <div class="card-block hidden">
+                <div id="log">
+                    <strong>Log:</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" id="heading-virusscan">
+                    <a data-toggle="collapse" href="#collapse-virusscan" aria-expanded="false"
+                       aria-controls="collapse-virusscan">
+                        <img id="virusscan-state" class="float-xs-right test-state" src="img/loading.gif" alt="loading..."/>
+                        <h5 class="mb-0">VirusScan</h5>
+                    </a>
+                </div>
+
+                <div id="collapse-virusscan" class="collapse" aria-labelledby="heading-virusscan">
+                    <div class="card-block">
+                        <span id="virusscan-placeholder">…</span>
+                        <p id="virusscan-info" class="invisible"></p>
+                        <table id="virusscan-result" class="table table-sm table-striped invisible">
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <a data-toggle="collapse" href="#collapseTwo" aria-expanded="false"
+                       aria-controls="collapseTwo">
+                        <h5 class="mb-0">Test 2</h5>
+                    </a>
+                </div>
+
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+                    <div class="card-block">
+                        Not implemented yet.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <a data-toggle="collapse" href="#collapseThree"
+                       aria-expanded="false"
+                       aria-controls="collapseThree">
+                        <h5 class="mb-0">Test 3</h5>
+                    </a>
+                </div>
+
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
+                    <div class="card-block">
+                        Not implemented yet.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <th:block th:replace="page :: footer"/>
 
+<script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="lib/tether/dist/js/tether.min.js"></script>
+<script type="text/javascript" src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/check.js"></script>
 </body>
 </html>

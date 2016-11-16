@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="head :: meta"/>
-    <th:block th:replace="head :: mainhead"/>
-    <th:block th:replace="head :: css"/>
-    <th:block th:replace="head :: js"/>
-    <th:block th:replace="head :: js-main"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title >webifier</title>
+    <link rel="shortcut icon" type="image/x-icon" href="img/webifier.png"/>
+
+    <link rel="stylesheet" href="lib/tether/dist/css/tether.min.css"/>
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="lib/components-font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
 <th:block th:replace="page :: nav"/>
@@ -38,5 +44,9 @@
 </div>
 
 <th:block th:replace="page :: footer"/>
+
+<script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="lib/tether/dist/js/tether.min.js"></script>
+<script type="text/javascript" src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
