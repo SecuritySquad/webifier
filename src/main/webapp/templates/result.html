@@ -31,7 +31,7 @@
 <th:block th:replace="page :: nav"/>
 
 <div class="container mt-3">
-    <h3 th:text="${check_url}"></h3>
+    <h3><span th:text="${check_url}"></span> -> <span id="resolved-url">...</span></h3>
     <div class="card state">
         <div class="card-header" id="heading-log">
             <a data-toggle="collapse" href="#collapse-log" aria-expanded="false"

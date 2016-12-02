@@ -21,6 +21,9 @@ stomp.connect(header, function (frame) {
 
 function executeEvent(event) {
     switch (event.typ) {
+        case 'ResolverFinishedWithResult':
+            setResolvedResult(event.result);
+            break;
         case 'TesterFinished':
             setResultMalicious(event.malicious);
             break;
@@ -52,6 +55,14 @@ function setVirusScanResult(result) {
         $('#virusscan-result').append('<tr' + (files[i].malicious ? ' class="table-danger"' : '') + '><td>' + files[i].name + '</td><td><span class="fa fa-' + (files[i].malicious ? 'exclamation-circle text-danger' : 'check-circle text-success') + '"></span></td></tr>');
     }
     $('#virusscan-result').removeClass('invisible');
+}
+
+function setResolvedResult(result) {
+    if (result.reachable) {
+        $('#resolved-url').html(result.resolved);
+    } else {
+        // TODO show error and cancel all views
+    }
 }
 
 function setResultMaliciousImage(element, malicious) {
