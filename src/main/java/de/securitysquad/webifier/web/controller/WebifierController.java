@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by samuel on 25.10.16.
@@ -44,25 +42,19 @@ public class WebifierController {
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public String redirectResultView(@RequestParam("url") String urlParameter, HttpSession session) {
+    public String redirectResultView(@RequestParam("url") String url, HttpSession session) {
         UrlValidator validator = new UrlValidator(new String[]{"http", "https"});
-        String urlWithProtocol = withProtocol(urlParameter);
-        if (validator.isValid(urlWithProtocol)) {
-            try {
-                URL url = new URL(urlWithProtocol);
-                launchTester(url, session);
-                return "redirect:/checked";
-            } catch (MalformedURLException e) {
-                // url is invalid
-            }
+        if (validator.isValid(withProtocol(url))) {
+            launchTester(url, session);
+            return "redirect:/checked";
         }
         session.setAttribute("error", "url_invalid");
         return "redirect:/";
     }
 
-    private void launchTester(URL url, HttpSession session) {
+    private void launchTester(String url, HttpSession session) {
         String id = webifierTesterLauncher.launch(url, session, checkController);
-        session.setAttribute(WebifierConstants.Session.CHECK_URL, url.toString());
+        session.setAttribute(WebifierConstants.Session.CHECK_URL, url);
         session.setAttribute(WebifierConstants.Session.CHECK_ID, id);
     }
 

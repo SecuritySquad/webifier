@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -21,9 +20,9 @@ public class WebifierTesterLauncher {
     @Value("${tester.command}")
     private String testerCommand;
 
-    public String launch(URL url, HttpSession session, WebifierTestResultListener listener) {
+    public String launch(String url, HttpSession session, WebifierTestResultListener listener) {
         String id = UUID.randomUUID().toString();
-        String command = testerCommand.replace("#URL", url.toString()).replace("#ID", id);
+        String command = testerCommand.replace("#URL", url).replace("#ID", id);
         System.out.println(command);
         startTester(command, session, listener);
         return id;
