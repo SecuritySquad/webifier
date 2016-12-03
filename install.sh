@@ -2,8 +2,8 @@
 
 cd ..
 
-ls | grep -v "webifier-platform|persistent" | xargs rm -rf
-
+rm -rf run
+rm -rf webifier-tester
 git clone https://github.com/SecuritySquad/webifier-tester.git
 cd webifier-tester
 sh install.sh
