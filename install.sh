@@ -15,6 +15,7 @@ then
 fi
 
 cd webifier-platform
+bower install
 ./gradlew :buildAll
 cd ..
 
