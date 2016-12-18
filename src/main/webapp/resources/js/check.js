@@ -44,6 +44,9 @@ function setTestResult(event) {
         case 'PortScan':
             setPortScanResult(event.result);
             break;
+        case 'HeaderInspection':
+            setPortScanResult(event.result);
+            break;
         default:
             break;
     }
@@ -72,6 +75,14 @@ function setPortScanResult(result) {
         }
         $('#portscan-result').removeClass('invisible');
     }
+}
+
+function setHeaderInspectionResult(result) {
+    setResultMaliciousImage($('#header-inspection-state'), result.malicious);
+    $('#header-inspection-placeholder').addClass('invisible');
+    var resultText = (result.info.malicious) ? "HTML-Antworten stimmen nicht überein" : "HTML-Antworten stimmen überein";
+    $('#header-inspection-info').html(resultText).removeClass('invisible');
+    var files = result.info.files;
 }
 
 function setResolvedResult(result) {
