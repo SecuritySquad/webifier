@@ -41,6 +41,9 @@ function setTestResult(event) {
         case 'VirusScan':
             setVirusScanResult(event.result);
             break;
+        case 'PortScan':
+            setPortScanResult(event.result);
+            break;
         default:
             break;
     }
@@ -55,6 +58,18 @@ function setVirusScanResult(result) {
         $('#virusscan-result').append('<tr' + (files[i].malicious ? ' class="table-danger"' : '') + '><td>' + files[i].name + '</td><td><span class="fa fa-' + (files[i].malicious ? 'exclamation-circle text-danger' : 'check-circle text-success') + '"></span></td></tr>');
     }
     $('#virusscan-result').removeClass('invisible');
+}
+
+function setPortScanResult(result){
+    setResultMaliciousImage($('#portscan-state'), result.malicious);
+    $('#portscan-placeholder').addClass('invisible');
+    var unknown_ports = result.info.unkown_ports;
+    if(unknown_ports.length > 0){
+        $('portscan-info').html('Folgende verdächtige Ports wurden abgefragt:');
+        for(var i = 0; i < unknown_ports.length;i++){
+            $('portscan-result').append('<tr><td>' + unknown_ports[i] + '</td></tr>');
+        }
+    }
 }
 
 function setResolvedResult(result) {
