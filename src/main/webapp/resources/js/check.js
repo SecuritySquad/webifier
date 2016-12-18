@@ -60,15 +60,17 @@ function setVirusScanResult(result) {
     $('#virusscan-result').removeClass('invisible');
 }
 
-function setPortScanResult(result){
+function setPortScanResult(result) {
     setResultMaliciousImage($('#portscan-state'), result.malicious);
     $('#portscan-placeholder').addClass('invisible');
-    var unknown_ports = result.info.unkown_ports;
-    if(unknown_ports.length > 0){
-        $('portscan-info').html('Folgende verdächtige Ports wurden abgefragt:');
-        for(var i = 0; i < unknown_ports.length;i++){
-            $('portscan-result').append('<tr><td>' + unknown_ports[i] + '</td></tr>');
+    $('#portscan-info').html('Keine verdächtigen Ports gefunden.').removeClass('invisible');
+    var unknown_ports = result.info.unknown_ports;
+    if (unknown_ports.length > 0) {
+        $('#portscan-info').html('Folgende verdächtige Ports wurden abgefragt:');
+        for (var i = 0; i < unknown_ports.length; i++) {
+            $('#portscan-result').append('<tr><td>' + unknown_ports[i] + '</td></tr>');
         }
+        $('#portscan-result').removeClass('invisible');
     }
 }
 
