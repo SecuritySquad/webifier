@@ -21,13 +21,14 @@ stomp.connect(header, function (frame) {
 
 function executeEvent(event) {
     switch (event.typ) {
-        case 'ResolverFinishedWithResult':
+        case 'ResolverFinished':
             setResolvedResult(event.result);
             break;
         case 'TesterFinished':
-            setResultMalicious(event.malicious);
+            setResultMalicious(event.result);
             break;
-        case 'TestFinishedWithResult':
+        case 'TestFinished':
+            setTestResult(event);
         case 'TestFinishedWithError':
             setTestResult(event);
             break;
@@ -53,7 +54,7 @@ function setTestResult(event) {
 }
 
 function setVirusScanResult(result) {
-    setResultMaliciousImage($('#virusscan-state'), result.malicious);
+    setResultMaliciousImage($('#virusscan-state'), result.result);
     $('#virusscan-placeholder').addClass('invisible');
     $('#virusscan-info').html('Geprüfte Dateien: ' + result.info.scanned_files + '</br>Infizierte Dateien gefunden: ' + result.info.malicious_files).removeClass('invisible');
     var files = result.info.files;
@@ -64,7 +65,7 @@ function setVirusScanResult(result) {
 }
 
 function setPortScanResult(result) {
-    setResultMaliciousImage($('#portscan-state'), result.malicious);
+    setResultMaliciousImage($('#portscan-state'), result.result);
     $('#portscan-placeholder').addClass('invisible');
     $('#portscan-info').html('Keine verdächtigen Ports gefunden.').removeClass('invisible');
     var unknown_ports = result.info.unknown_ports;
@@ -78,7 +79,7 @@ function setPortScanResult(result) {
 }
 
 function setHeaderInspectionResult(result) {
-    setResultMaliciousImage($('#header-inspection-state'), result.malicious);
+    setResultMaliciousImage($('#header-inspection-state'), result.result);
     $('#header-inspection-placeholder').addClass('invisible');
     var resultText = (result.info.malicious) ? "HTML-Antworten stimmen nicht überein" : "HTML-Antworten stimmen überein";
     $('#header-inspection-info').html(resultText).removeClass('invisible');
@@ -92,19 +93,19 @@ function setResolvedResult(result) {
     }
 }
 
-function setResultMaliciousImage(element, malicious) {
-    if (malicious) {
-        element.attr('src', 'img/error.png');
-    } else {
-        element.attr('src', 'img/success.png');
+function setResultMaliciousImage(element, result) {
+    if (result.valueOf() == "CLEAN") {
+        element.attr('src', 'img/webifier-clean.png');
+    } else if (result.valueOf() == "WARNING")  {
+        element.attr('src', 'img/webifier-warning.png');
+    }else if (result.valueOf() == "MALICIOUS")  {
+        element.attr('src', 'img/webifier-malicious.png');
+    }else {
+        element.attr('src', 'img/webifier-undefined.png');
     }
 }
 
-function setResultMalicious(malicious) {
+function setResultMalicious(result) {
     $('#heading-log').css('background-color', '#f5f5f5');
-    if (malicious) {
-        $('#test-state').attr('src', 'img/webifier-error.png');
-    } else {
-        $('#test-state').attr('src', 'img/webifier-success.png');
-    }
+    setResultMaliciousImage($('test-state'), result);
 }
