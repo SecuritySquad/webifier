@@ -29,8 +29,6 @@ function executeEvent(event) {
             break;
         case 'TestFinished':
             setTestResult(event);
-        case 'TestFinishedWithError':
-            setTestResult(event);
             break;
         default:
             break;
@@ -107,5 +105,13 @@ function setResultMaliciousImage(element, result) {
 
 function setResultMalicious(result) {
     $('#heading-log').css('background-color', '#f5f5f5');
-    setResultMaliciousImage($('test-state'), result);
+    if (result.valueOf() == "CLEAN") {
+        $('#test-state').attr('src', 'img/clean.png');
+    } else if (result.valueOf() == "WARNING")  {
+        $('#test-state').attr('src', 'img/warning.png');
+    }else if (result.valueOf() == "MALICIOUS")  {
+        $('#test-state').attr('src', 'img/malicious.png');
+    }else {
+        $('#test-state').attr('src', 'img/undefined.png');
+    }
 }
