@@ -93,25 +93,25 @@ function setResolvedResult(result) {
 
 function setResultMaliciousImage(element, result) {
     if (result.valueOf() == "CLEAN") {
-        element.attr('src', 'img/webifier-clean.png');
+        element.attr('src', 'img/clean.png');
     } else if (result.valueOf() == "WARNING")  {
-        element.attr('src', 'img/webifier-warning.png');
+        element.attr('src', 'img/warning.png');
     }else if (result.valueOf() == "MALICIOUS")  {
-        element.attr('src', 'img/webifier-malicious.png');
+        element.attr('src', 'img/malicious.png');
     }else {
-        element.attr('src', 'img/webifier-undefined.png');
+        element.attr('src', 'img/undefined.png');
     }
 }
 
 function setResultMalicious(result) {
     $('#heading-log').css('background-color', '#f5f5f5');
     if (result.valueOf() == "CLEAN") {
-        $('#test-state').attr('src', 'img/clean.png');
+        $('#test-state').attr('src', 'img/webifier-clean.png');
     } else if (result.valueOf() == "WARNING")  {
-        $('#test-state').attr('src', 'img/warning.png');
+        $('#test-state').attr('src', 'img/webifier-warning.png');
     }else if (result.valueOf() == "MALICIOUS")  {
-        $('#test-state').attr('src', 'img/malicious.png');
+        $('#test-state').attr('src', 'img/webifier-malicious.png');
     }else {
-        $('#test-state').attr('src', 'img/undefined.png');
+        $('#test-state').attr('src', 'img/webifier-undefined.png');
     }
 }
