@@ -24,11 +24,30 @@ function executeEvent(event) {
         case 'ResolverFinished':
             setResolvedResult(event.result);
             break;
-        case 'TesterFinished':
-            setResultMalicious(event.result);
+        case 'TestStarted':
+            setTestLoading(event);
             break;
         case 'TestFinished':
             setTestResult(event);
+            break;
+        case 'TesterFinished':
+            setResultMalicious(event.result);
+            break;
+        default:
+            break;
+    }
+}
+
+function setTestLoading(event) {
+    switch (event.test_name) {
+        case 'VirusScan':
+            $('#virusscan-state').attr('src', 'img/loading.gif');
+            break;
+        case 'PortScan':
+            $('#portscan-state').attr('src', 'img/loading.gif');
+            break;
+        case 'HeaderInspection':
+            $('#header-inspection-state').attr('src', 'img/loading.gif');
             break;
         default:
             break;
@@ -92,26 +111,24 @@ function setResolvedResult(result) {
 }
 
 function setResultMaliciousImage(element, result) {
-    if (result.valueOf() == "CLEAN") {
-        element.attr('src', 'img/clean.png');
-    } else if (result.valueOf() == "WARNING")  {
-        element.attr('src', 'img/warning.png');
-    }else if (result.valueOf() == "MALICIOUS")  {
-        element.attr('src', 'img/malicious.png');
-    }else {
-        element.attr('src', 'img/undefined.png');
-    }
+    element.attr('src', 'img/' + getResultImage(result));
 }
 
 function setResultMalicious(result) {
     $('#heading-log').css('background-color', '#f5f5f5');
-    if (result.valueOf() == "CLEAN") {
-        $('#test-state').attr('src', 'img/webifier-clean.png');
-    } else if (result.valueOf() == "WARNING")  {
-        $('#test-state').attr('src', 'img/webifier-warning.png');
-    }else if (result.valueOf() == "MALICIOUS")  {
-        $('#test-state').attr('src', 'img/webifier-malicious.png');
-    }else {
-        $('#test-state').attr('src', 'img/webifier-undefined.png');
+    $("#favicon").attr('href', 'img/webifier-' + getResultImage(result));
+    $('#test-state').attr('src', 'img/webifier-' + getResultImage(result));
+}
+
+function getResultImage(result) {
+    switch (result) {
+        case "CLEAN":
+            return 'clean.png';
+        case "WARNING":
+            return 'warning.png';
+        case "MALICIOUS":
+            return 'malicious.png';
+        default:
+            return 'undefined.png';
     }
 }
