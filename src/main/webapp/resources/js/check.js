@@ -73,10 +73,23 @@ function setTestResult(event) {
 function setVirusScanResult(result) {
     setResultMaliciousImage($('#virusscan-state'), result.result);
     $('#virusscan-placeholder').addClass('invisible');
-    $('#virusscan-info').html('Geprüfte Dateien: ' + result.info.scanned_files + '</br>Infizierte Dateien gefunden: ' + result.info.malicious_files).removeClass('invisible');
+    $('#virusscan-info').html('Geprüfte Dateien: ' + result.info.scanned_files + '</br>Verdächtige Dateien: ' + result.info.suspicious_files + '</br>Maliziöse Dateien: ' + result.info.malicious_files).removeClass('invisible');
     var files = result.info.files;
     for (var i = 0; i < files.length; i++) {
-        $('#virusscan-result').append('<tr' + (files[i].malicious ? ' class="table-danger"' : '') + '><td>' + files[i].name + '</td><td><span class="fa fa-' + (files[i].malicious ? 'exclamation-circle text-danger' : 'check-circle text-success') + '"></span></td></tr>');
+        var table = '';
+        var icon = 'fa-check-circle';
+        var color = 'text-success';
+        if (files[i].result == "SUSPICIOUS") {
+            table = 'table-warning';
+            icon = 'fa-exclamation-triangle';
+            color = 'text-warning';
+        }
+        if (files[i].result == "MALICIOUS") {
+            table = 'table-danger';
+            icon = 'fa-times-circle';
+            color = 'text-danger';
+        }
+        $('#virusscan-result').append('<tr class="' + table + '"><td><small>' + files[i].name + '</small></td><td><span class="fa ' + icon + ' ' + color + '"></span></td></tr>');
     }
     $('#virusscan-result').removeClass('invisible');
 }
