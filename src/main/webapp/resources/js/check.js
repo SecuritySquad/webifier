@@ -137,7 +137,7 @@ function getResultImage(result) {
     switch (result) {
         case "CLEAN":
             return 'clean.png';
-        case "WARNING":
+        case "SUSPICIOUS":
             return 'warning.png';
         case "MALICIOUS":
             return 'malicious.png';

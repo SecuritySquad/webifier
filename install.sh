@@ -27,8 +27,8 @@ JAR=$(ls| grep 'webifier\-platform\-all\-.*\.jar')
 
 cat > start.sh << EOF
 killall java
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
+docker stop \$(docker ps -a -q)
+docker rm \$(docker ps -a -q)
 
 java -jar ${JAR} > output.log 2>&1 &
 EOF
