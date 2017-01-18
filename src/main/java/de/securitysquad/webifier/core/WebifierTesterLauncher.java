@@ -46,9 +46,13 @@ public class WebifierTesterLauncher {
                 String line;
                 while ((line = br.readLine()) != null) {
                     System.out.println(line);
-                    TesterResult result = mapper.readValue(line, TesterResult.class);
-                    result.setContent(line);
-                    listener.onTestResult(session, result.getLaunchId(), result);
+                    try {
+                        TesterResult result = mapper.readValue(line, TesterResult.class);
+                        result.setContent(line);
+                        listener.onTestResult(session, result.getLaunchId(), result);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             } catch (IOException e) {
                 listener.onError(session, ExceptionUtils.getStackTrace(e));
