@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Created by samuel on 16.11.16.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TesterResult {
+public class WebifierTesterResult {
     @JsonProperty
     private String typ;
     @JsonProperty

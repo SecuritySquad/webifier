@@ -14,4 +14,9 @@ public class WebifierConstants {
         public static final String URL = "checkUrl";
         public static final String ID = "checkId";
     }
+
+    public class Configuration {
+        public static final String EXTERNAL = "platform.json";
+        public static final String INTERNAL = "config.json";
+    }
 }

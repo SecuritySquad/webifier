@@ -1,76 +1,75 @@
 package de.securitysquad.webifier.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Value;
+import de.securitysquad.webifier.config.WebifierConfig;
+import de.securitysquad.webifier.config.WebifierTesterConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
+
+import static de.securitysquad.webifier.core.WebifierTesterState.*;
+import static java.util.Arrays.asList;
+import static java.util.Comparator.comparingLong;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by samuel on 08.11.16.
  */
 @Component
-public class WebifierTesterLauncher {
-    @Value("${tester.command}")
-    private String testerCommand;
+public class WebifierTesterLauncher implements Runnable {
+    private final WebifierTesterConfig config;
 
-    public String launch(String url, HttpSession session, WebifierTestResultListener listener) {
+    private List<WebifierTester> queue;
+    private Thread testerProcessor;
+
+    @Autowired
+    public WebifierTesterLauncher(WebifierConfig config) {
+        this.config = config.getTester();
+        this.queue = Collections.synchronizedList(new ArrayList<>());
+        this.testerProcessor = new Thread(this);
+        this.testerProcessor.start();
+    }
+
+    @PreDestroy
+    public void destroy() {
+        queue.forEach(WebifierTester::exit);
+        testerProcessor.interrupt();
+    }
+
+    public synchronized String launch(String url, HttpSession session, WebifierTesterResultListener listener) {
         String id = UUID.randomUUID().toString();
-        String command = testerCommand.replace("#URL", url).replace("#ID", id);
-        System.out.println(command);
-        startTester(command, session, listener);
+        String command = config.getCommand().replace("#URL", url).replace("#ID", id);
+        queue.add(new WebifierTester(id, command, session, listener, config.getTimeout()));
         return id;
     }
 
-    private void startTester(String command, HttpSession session, WebifierTestResultListener listener) {
-        try {
-            Process process = Runtime.getRuntime().exec(command);
-            listenForInput(process.getInputStream(), session, listener);
-            listenForError(process.getErrorStream(), session, listener);
-        } catch (IOException e) {
-            listener.onError(session, ExceptionUtils.getStackTrace(e));
+    @Override
+    public void run() {
+        Predicate<? super WebifierTester> waiting = t -> t.getState() == WAITING;
+        Predicate<? super WebifierTester> exited = t -> asList(FINISHED, ERROR).contains(t.getState());
+        while (!testerProcessor.isInterrupted()) {
+            queue.stream().filter(exited).collect(toList()).forEach(t -> {
+                t.exit();
+                queue.remove(t);
+            });
+            List<WebifierTester> waitingTesters = queue.stream().filter(waiting).sorted(comparingLong(WebifierTester::getCreationIndex)).collect(toList());
+            for (int index = 0; index < waitingTesters.size(); index++) {
+                waitingTesters.get(index).setWaitingPosition(index + 1);
+            }
+            if (queue.stream().mapToInt(t -> t.getState() == RUNNING ? 1 : 0).sum() < config.getParallel()) {
+                queue.stream().filter(waiting).min(comparingLong(WebifierTester::getCreationIndex)).ifPresent(WebifierTester::launch);
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                testerProcessor.interrupt();
+            }
         }
-    }
-
-    private void listenForInput(InputStream inputStream, HttpSession session, WebifierTestResultListener listener) {
-        new Thread(() -> {
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    System.out.println(line);
-                    try {
-                        TesterResult result = mapper.readValue(line, TesterResult.class);
-                        result.setContent(line);
-                        listener.onTestResult(session, result.getLaunchId(), result);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (IOException e) {
-                listener.onError(session, ExceptionUtils.getStackTrace(e));
-            }
-        }).start();
-    }
-
-    private void listenForError(InputStream errorStream, HttpSession session, WebifierTestResultListener listener) {
-        new Thread(() -> {
-            BufferedReader br = new BufferedReader(new InputStreamReader(errorStream));
-            try {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    listener.onError(session, line);
-                }
-            } catch (IOException e) {
-                listener.onError(session, ExceptionUtils.getStackTrace(e));
-            }
-        }).start();
     }
 }

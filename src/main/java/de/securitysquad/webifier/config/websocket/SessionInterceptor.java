@@ -20,6 +20,7 @@ public class SessionInterceptor implements HandshakeInterceptor {
         HttpServletRequest httpRequest = ((ServletServerHttpRequest) request).getServletRequest();
         HttpSession session = httpRequest.getSession(false);
         if (session != null) {
+            session.setMaxInactiveInterval(0);
             attributes.put(WebifierConstants.Session.HTTP_SESSION, session);
             return true;
         }

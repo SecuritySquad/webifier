@@ -1,8 +1,8 @@
 package de.securitysquad.webifier.web.controller;
 
 import de.securitysquad.webifier.config.WebifierConstants;
-import de.securitysquad.webifier.core.WebifierTestResultListener;
 import de.securitysquad.webifier.core.WebifierTesterLauncher;
+import de.securitysquad.webifier.core.WebifierTesterResultListener;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +20,10 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class WebifierController {
     private final WebifierTesterLauncher webifierTesterLauncher;
-    private final WebifierTestResultListener checkController;
+    private final WebifierTesterResultListener checkController;
 
     @Autowired
-    public WebifierController(WebifierTesterLauncher webifierTesterLauncher, WebifierTestResultListener checkController) {
+    public WebifierController(WebifierTesterLauncher webifierTesterLauncher, WebifierTesterResultListener checkController) {
         Assert.notNull(webifierTesterLauncher, "webifierTesterLauncher must not be null!");
         Assert.notNull(checkController, "checkController must not be null!");
         this.webifierTesterLauncher = webifierTesterLauncher;

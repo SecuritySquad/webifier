@@ -1,23 +1,32 @@
 /**
  * Created by samuel on 02.11.16.
  */
-var stomp = Stomp.over(new SockJS('/connect'));
-stomp.debug = function (args) {
-    console.log(args);
-};
-stomp.connect(header, function (frame) {
+var client = Stomp.over(new SockJS('/connect'));
+client.connect(getHeader(), function (frame) {
     console.log(frame);
-    stomp.subscribe('/user/check', function (payload, headers, res) {
-        console.log(payload);
+    client.subscribe('/user/started', function (payload) {
+        $('#test-state').attr('src', 'img/webifier-loading.gif');
+        $('#waiting-position').hide();
+        $('#test-info').hide();
+    }, getHeader());
+    client.subscribe('/user/waiting', function (payload) {
+        $('#waiting-position').html(payload.body);
+    }, getHeader());
+    client.subscribe('/user/check', function (payload) {
         var event = JSON.parse(payload.body);
         if (event.message) {
             $('#log').append('</br>' + event.message);
         }
         executeEvent(event);
-    }, header);
+    }, getHeader());
+    client.send('/connect', header, 'connect');
 }, function (err) {
     console.error('connection error:' + err);
 });
+
+function getHeader() {
+    return JSON.parse(JSON.stringify(header));
+}
 
 function executeEvent(event) {
     switch (event.typ) {
@@ -97,14 +106,16 @@ function setVirusScanResult(result) {
 function setPortScanResult(result) {
     setResultMaliciousImage($('#portscan-state'), result.result);
     $('#portscan-placeholder').addClass('invisible');
-    $('#portscan-info').html('Keine verdächtigen Ports gefunden.').removeClass('invisible');
+    var $portscan_info = $('#portscan-info');
+    $portscan_info.html('Keine verdächtigen Ports gefunden.').removeClass('invisible');
     var unknown_ports = result.info.unknown_ports;
     if (unknown_ports.length > 0) {
-        $('#portscan-info').html('Folgende verdächtige Ports wurden abgefragt:');
+        $portscan_info.html('Folgende verdächtige Ports wurden abgefragt:');
+        var $portscan_result = $('#portscan-result');
         for (var i = 0; i < unknown_ports.length; i++) {
-            $('#portscan-result').append('<tr><td>' + unknown_ports[i] + '</td></tr>');
+            $portscan_result.append('<tr><td>' + unknown_ports[i] + '</td></tr>');
         }
-        $('#portscan-result').removeClass('invisible');
+        $portscan_result.removeClass('invisible');
     }
 }
 
