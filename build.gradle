@@ -36,10 +36,8 @@ dependencies {
     compile('org.apache.logging.log4j:log4j-core:2.7')
     compile('org.apache.commons:commons-lang3:3.4')
     compile('commons-validator:commons-validator:1.5.1')
+    compile('commons-io:commons-io:2.5')
 
-    compile('javax.persistence:persistence-api:1.0.2')
-
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.session:spring-session')
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')

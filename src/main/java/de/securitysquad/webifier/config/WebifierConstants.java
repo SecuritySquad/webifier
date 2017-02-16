@@ -16,7 +16,6 @@ public class WebifierConstants {
     }
 
     public class Configuration {
-        public static final String EXTERNAL = "platform.json";
-        public static final String INTERNAL = "config.json";
+        public static final String NAME = "config.json";
     }
 }
