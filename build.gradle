@@ -1,3 +1,6 @@
+group 'de.securitysquad.webifier'
+version '0.0.1-SNAPSHOT'
+
 buildscript {
     ext {
         springBootVersion = '1.4.1.RELEASE'
@@ -54,16 +57,14 @@ dependencies {
 }
 
 jar {
-    baseName = 'webifier-platform'
-    version = '0.0.1-SNAPSHOT'
+    baseName = rootProject.name
     manifest {
         attributes "Main-Class": "de.securitysquad.webifier.WebifierPlatformApplication"
     }
 }
 
 task buildAll(type: Jar) {
-    baseName = 'webifier-platform-all'
-    version = '0.0.1-SNAPSHOT'
+    baseName = rootProject.name + '-all'
     manifest {
         attributes "Main-Class": "de.securitysquad.webifier.WebifierPlatformApplication"
     }
