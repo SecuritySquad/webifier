@@ -9,9 +9,9 @@ cd webifier-tester
 sh install.sh
 cd ..
 
-if [ -e persistent/application.extension ]
+if [ -e persistent/platform-application.extension ]
 then
-    cat persistent/application.extension >> webifier-platform/src/main/resources/application.properties
+    cat persistent/platform-application.extension >> webifier-platform/src/main/resources/application.properties
 fi
 
 cd webifier-platform
@@ -25,12 +25,12 @@ cp ../webifier-platform/build/libs/webifier-platform-all-*.jar .
 
 JAR=$(ls| grep 'webifier\-platform\-all\-.*\.jar')
 
-cat > start.sh << EOF
-killall java
+cat > start-platform.sh << EOF
+killall webifier-plat
 docker stop \$(docker ps -a -q)
 docker rm \$(docker ps -a -q)
 
-java -jar ${JAR} > output.log 2>&1 &
+LD_PRELOAD=../persistent/libprocname.so PROCNAME=webifier-plat java -jar ${JAR} > output.log 2>&1 &
 EOF
 
-chmod +x start.sh
+chmod +x start-platform.sh
