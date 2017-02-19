@@ -3,7 +3,7 @@ version '0.0.1-SNAPSHOT'
 
 buildscript {
     ext {
-        springBootVersion = '1.4.1.RELEASE'
+        springBootVersion = '1.5.1.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -42,11 +42,11 @@ dependencies {
     compile('commons-io:commons-io:2.5')
 
     compile('org.springframework.boot:spring-boot-starter-security')
-    compile('org.springframework.session:spring-session')
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-websocket')
 
+    compile('org.springframework.session:spring-session')
     compile('org.springframework.security:spring-security-messaging')
 
     testCompile('junit:junit:4.12')
@@ -61,13 +61,4 @@ jar {
     manifest {
         attributes "Main-Class": "de.securitysquad.webifier.WebifierPlatformApplication"
     }
-}
-
-task buildAll(type: Jar) {
-    baseName = rootProject.name + '-all'
-    manifest {
-        attributes "Main-Class": "de.securitysquad.webifier.WebifierPlatformApplication"
-    }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }

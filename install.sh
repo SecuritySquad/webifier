@@ -21,9 +21,9 @@ cd ..
 
 mkdir -p run
 cd run
-cp ../webifier-platform/build/libs/webifier-platform-all-*.jar .
+cp ../webifier-platform/build/libs/webifier-platform-*.jar .
 
-JAR=$(ls| grep 'webifier\-platform\-all\-.*\.jar')
+JAR=$(ls| grep 'webifier\-platform\-.*\.jar')
 
 cat > start-platform.sh << EOF
 killall webifier-plat
