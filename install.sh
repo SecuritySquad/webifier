@@ -16,7 +16,7 @@ fi
 
 cd webifier-platform
 bower install
-./gradlew :buildAll
+./gradlew :build
 cd ..
 
 mkdir -p run
