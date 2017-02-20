@@ -2,7 +2,6 @@
 
 cd ..
 
-rm -rf run
 rm -rf webifier-tester
 git clone https://github.com/SecuritySquad/webifier-tester.git
 cd webifier-tester
@@ -19,8 +18,11 @@ bower install
 ./gradlew :build
 cd ..
 
-mkdir -p run
 cd run
+
+rm -f webifier-platform-*.jar
+rm -f start-platform.sh
+
 cp ../webifier-platform/build/libs/webifier-platform-*.jar .
 
 JAR=$(ls| grep 'webifier\-platform\-.*\.jar')
