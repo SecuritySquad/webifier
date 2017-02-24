@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: bash install.sh [--only \"test1 test2\"]"
+    exit
+fi
+
 cd ..
 
 rm -rf webifier-tester
 git clone https://github.com/SecuritySquad/webifier-tester.git
 cd webifier-tester
-sh install.sh
+bash install.sh $1 $2
 cd ..
 
 if [ -e persistent/application-platform.extension ]

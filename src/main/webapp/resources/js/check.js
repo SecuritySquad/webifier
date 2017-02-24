@@ -58,6 +58,9 @@ function setTestLoading(event) {
         case 'HeaderInspection':
             $('#header-inspection-state').attr('src', 'img/loading.gif');
             break;
+        case 'LinkChecker':
+            $('#linkchecker-state').attr('src', 'img/loading.gif');
+            break;
         default:
             break;
     }
@@ -73,6 +76,9 @@ function setTestResult(event) {
             break;
         case 'HeaderInspection':
             setHeaderInspectionResult(event.result);
+            break;
+        case 'LinkChecker':
+            setLinkCheckerResult(event.result);
             break;
         default:
             break;
@@ -126,11 +132,41 @@ function setHeaderInspectionResult(result) {
     $('#header-inspection-info').html(resultText).removeClass('invisible');
 }
 
+function setLinkCheckerResult(result) {
+    setResultMaliciousImage($('#linkchecker-state'), result.result);
+    $('#linkchecker-placeholder').addClass('invisible');
+    $('#linkchecker-info').html('Geprüfte Webseiten:').removeClass('invisible');
+    var hosts = result.info.hosts;
+    for (var i = 0; i < hosts.length; i++) {
+        var table = '';
+        var icon = 'fa-check-circle';
+        var color = 'text-success';
+        if (hosts[i].result == "SUSPICIOUS") {
+            table = 'table-warning';
+            icon = 'fa-exclamation-triangle';
+            color = 'text-warning';
+        }
+        if (hosts[i].result == "MALICIOUS") {
+            table = 'table-danger';
+            icon = 'fa-times-circle';
+            color = 'text-danger';
+        }
+        if (hosts[i].result == "UNDEFINED") {
+            icon = 'fa-question-circle';
+            color = 'text-muted';
+        }
+        $('#linkchecker-result').append('<tr class="' + table + '"><td><small>' + hosts[i].host + '</small></td><td><span class="fa ' + icon + ' ' + color + '"></span></td></tr>');
+    }
+    $('#linkchecker-result').removeClass('invisible');
+}
+
+
 function setResolvedResult(result) {
     if (result.reachable) {
         $('#resolved-url').html(result.resolved);
     } else {
-        // TODO show error and cancel all views
+        $('#resolved-url').html("Nicht erreichbar!");
+        $('#test-state').attr('src', 'img/webifier.png');
     }
 }
 
