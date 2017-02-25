@@ -186,14 +186,13 @@ function setCertificateCheckerResult(result) {
         issuer.append($('<tr>').append($('<th>').html('Organisationseinheit')).append($('<td>').html(certificate.issuer.organisation_unit)));
         $('#certificatechecker-result').append($('<p>').addClass('small').html('Ausgestellt von:')).append(issuer);
         var validity = $('<table>').addClass('table table-sm table-striped small');
-        weekday: 'short',
         var options = {
+            weekday: 'long',
             year: 'numeric',
-            month: 'short',
+            month: 'long',
             day: 'numeric',
             hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
+            minute: '2-digit'
         };
         var from = new Date(certificate.validity.from);
         validity.append($('<tr>').append($('<th>').html('Gültig ab')).append($('<td>').html(from.toLocaleString('de-DE', options))));
