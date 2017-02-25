@@ -61,6 +61,9 @@ function setTestLoading(event) {
         case 'LinkChecker':
             $('#linkchecker-state').attr('src', 'img/loading.gif');
             break;
+        case 'CertificateChecker':
+            $('#certificatechecker-state').attr('src', 'img/loading.gif');
+            break;
         default:
             break;
     }
@@ -79,6 +82,9 @@ function setTestResult(event) {
             break;
         case 'LinkChecker':
             setLinkCheckerResult(event.result);
+            break;
+        case 'CertificateChecker':
+            setCertificateCheckerResult(event.result);
             break;
         default:
             break;
@@ -158,6 +164,42 @@ function setLinkCheckerResult(result) {
         $('#linkchecker-result').append('<tr class="' + table + '"><td><small>' + hosts[i].host + '</small></td><td><span class="fa ' + icon + ' ' + color + '"></span></td></tr>');
     }
     $('#linkchecker-result').removeClass('invisible');
+}
+
+function setCertificateCheckerResult(result) {
+    setResultMaliciousImage($('#certificatechecker-state'), result.result);
+    $('#certificatechecker-placeholder').addClass('invisible');
+    $('#certificatechecker-info').html(result.info.certificate ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
+    if (result.info.certificate) {
+        var certificate = result.info.certificate;
+        var subject = $('<table>').addClass('table table-sm table-striped small');
+        subject.append($('<tr>').append($('<th>').html('Name')).append($('<td>').html(certificate.subject.name)));
+        subject.append($('<tr>').append($('<th>').html('Organisation')).append($('<td>').html(certificate.subject.organisation)));
+        subject.append($('<tr>').append($('<th>').html('Organisationseinheit')).append($('<td>').html(certificate.subject.organisation_unit)));
+        $('#certificatechecker-result').append($('<p>').addClass('small').html('Ausgestellt für:')).append(subject);
+        var issuer = $('<table>').addClass('table table-sm table-striped small');
+        issuer.append($('<tr>').append($('<th>').html('Name')).append($('<td>').html(certificate.issuer.name)));
+        issuer.append($('<tr>').append($('<th>').html('Organisation')).append($('<td>').html(certificate.issuer.organisation)));
+        issuer.append($('<tr>').append($('<th>').html('Organisationseinheit')).append($('<td>').html(certificate.issuer.organisation_unit)));
+        $('#certificatechecker-result').append($('<p>').addClass('small').html('Ausgestellt von:')).append(issuer);
+        var validity = $('<table>').addClass('table table-sm table-striped small');
+        var options = {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        var from = new Date(certificate.validity.from);
+        validity.append($('<tr>').append($('<th>').html('Gültig ab')).append($('<td>').html(from.toLocaleString('de-DE', options))));
+        var to = new Date(certificate.validity.to);
+        validity.append($('<tr>').append($('<th>').html('Gültig bis')).append($('<td>').html(to.toLocaleString('de-DE', options))));
+        $('#certificatechecker-result').append($('<p>').addClass('small').html('Gültigkeitszeitraum:')).append(validity);
+
+        $('#certificatechecker-result').removeClass('invisible');
+    }
 }
 
 
