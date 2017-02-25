@@ -171,7 +171,7 @@ function setCertificateCheckerResult(result) {
     $('#certificatechecker-placeholder').addClass('invisible');
     $('#certificatechecker-info').html(result.info ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
     if (result.info) {
-        if (result == 'MALICIOUS') {
+        if (result.result == 'MALICIOUS') {
             $('#certificatechecker-result').append($('<p>').css('font-weight', 'bold').html(result.info.certificate.result_code));
         }
         var certificate = result.info.certificate;
