@@ -169,8 +169,8 @@ function setLinkCheckerResult(result) {
 function setCertificateCheckerResult(result) {
     setResultMaliciousImage($('#certificatechecker-state'), result.result);
     $('#certificatechecker-placeholder').addClass('invisible');
-    $('#certificatechecker-info').html(result.info.certificate ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
-    if (result.info.certificate) {
+    $('#certificatechecker-info').html(result.info ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
+    if (result.info) {
         var certificate = result.info.certificate;
         var subject = $('<table>').addClass('table table-sm table-striped small');
         subject.append($('<tr>').append($('<th>').html('Name')).append($('<td>').html(certificate.subject.name)));
