@@ -141,8 +141,8 @@ function setHeaderInspectionResult(result) {
 function setLinkCheckerResult(result) {
     setResultMaliciousImage($('#linkchecker-state'), result.result);
     $('#linkchecker-placeholder').addClass('invisible');
-    $('#linkchecker-info').html('Geprüfte Webseiten:').removeClass('invisible');
     var hosts = result.info.hosts;
+    $('#linkchecker-info').html((hosts.length > 0) ? 'Geprüfte Webseiten:' : 'Keine Links gefunden.').removeClass('invisible');
     for (var i = 0; i < hosts.length; i++) {
         var table = '';
         var icon = 'fa-check-circle';
@@ -171,6 +171,9 @@ function setCertificateCheckerResult(result) {
     $('#certificatechecker-placeholder').addClass('invisible');
     $('#certificatechecker-info').html(result.info ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
     if (result.info) {
+        if (result == 'MALICIOUS') {
+            $('#certificatechecker-result').append($('<p>').css('font-weight', 'bold').html(result.info.certificate.result_code));
+        }
         var certificate = result.info.certificate;
         var subject = $('<table>').addClass('table table-sm table-striped small');
         subject.append($('<tr>').append($('<th>').html('Name')).append($('<td>').html(certificate.subject.name)));
@@ -183,8 +186,8 @@ function setCertificateCheckerResult(result) {
         issuer.append($('<tr>').append($('<th>').html('Organisationseinheit')).append($('<td>').html(certificate.issuer.organisation_unit)));
         $('#certificatechecker-result').append($('<p>').addClass('small').html('Ausgestellt von:')).append(issuer);
         var validity = $('<table>').addClass('table table-sm table-striped small');
+        weekday: 'short',
         var options = {
-            weekday: 'short',
             year: 'numeric',
             month: 'short',
             day: 'numeric',
