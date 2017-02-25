@@ -171,10 +171,10 @@ function setCertificateCheckerResult(result) {
     $('#certificatechecker-placeholder').addClass('invisible');
     $('#certificatechecker-info').html(result.info ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
     if (result.info) {
-        if (result.result == 'MALICIOUS') {
-            $('#certificatechecker-result').append($('<p>').css('font-weight', 'bold').html(result.info.certificate.result_code));
-        }
         var certificate = result.info.certificate;
+        if (result.result == 'MALICIOUS') {
+            $('#certificatechecker-result').append($('<p>').css('font-weight', 'bold').html(certificate.return_code));
+        }
         var subject = $('<table>').addClass('table table-sm table-striped small');
         subject.append($('<tr>').append($('<th>').html('Name')).append($('<td>').html(certificate.subject.name)));
         subject.append($('<tr>').append($('<th>').html('Organisation')).append($('<td>').html(certificate.subject.organisation)));
