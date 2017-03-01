@@ -63,6 +63,8 @@ function setTestLoading(event) {
             break;
         case 'CertificateChecker':
             $('#certificatechecker-state').attr('src', 'img/loading.gif');
+        case 'PhishingDetector':
+            $('#phishingdetector-state').attr('src', 'img/loading.gif');
             break;
         default:
             break;
@@ -86,37 +88,32 @@ function setTestResult(event) {
         case 'CertificateChecker':
             setCertificateCheckerResult(event.result);
             break;
+        case 'PhishingDetector':
+            setPhishingDetectorResult(event.result);
+            break;
         default:
             break;
     }
 }
 
 function setVirusScanResult(result) {
-    setResultMaliciousImage($('#virusscan-state'), result.result);
+    setSingleTestResultImage($('#virusscan-state'), result.result);
     $('#virusscan-placeholder').addClass('invisible');
     $('#virusscan-info').html('Geprüfte Dateien: ' + result.info.scanned_files + '</br>Verdächtige Dateien: ' + result.info.suspicious_files + '</br>Maliziöse Dateien: ' + result.info.malicious_files).removeClass('invisible');
     var files = result.info.files;
     for (var i = 0; i < files.length; i++) {
         var table = '';
-        var icon = 'fa-check-circle';
-        var color = 'text-success';
-        if (files[i].result == "SUSPICIOUS") {
+        if (files[i].result == "SUSPICIOUS")
             table = 'table-warning';
-            icon = 'fa-exclamation-triangle';
-            color = 'text-warning';
-        }
-        if (files[i].result == "MALICIOUS") {
+        if (files[i].result == "MALICIOUS")
             table = 'table-danger';
-            icon = 'fa-times-circle';
-            color = 'text-danger';
-        }
-        $('#virusscan-result').append('<tr class="' + table + '"><td><small>' + files[i].name + '</small></td><td><span class="fa ' + icon + ' ' + color + '"></span></td></tr>');
+        $('#virusscan-result').append('<tr class="' + table + '"><td><small>' + files[i].name + '</small></td><td>' + getFontAwesomeResultSymbol(files[i].result) + '</td></tr>');
     }
     $('#virusscan-result').removeClass('invisible');
 }
 
 function setPortScanResult(result) {
-    setResultMaliciousImage($('#portscan-state'), result.result);
+    setSingleTestResultImage($('#portscan-state'), result.result);
     $('#portscan-placeholder').addClass('invisible');
     var $portscan_info = $('#portscan-info');
     $portscan_info.html('Keine verdächtigen Ports gefunden.').removeClass('invisible');
@@ -132,48 +129,36 @@ function setPortScanResult(result) {
 }
 
 function setHeaderInspectionResult(result) {
-    setResultMaliciousImage($('#header-inspection-state'), result.result);
+    setSingleTestResultImage($('#header-inspection-state'), result.result);
     $('#header-inspection-placeholder').addClass('invisible');
     var resultText = (result.info.malicious) ? "HTML-Antworten stimmen nicht überein" : "HTML-Antworten stimmen überein";
     $('#header-inspection-info').html(resultText).removeClass('invisible');
 }
 
 function setLinkCheckerResult(result) {
-    setResultMaliciousImage($('#linkchecker-state'), result.result);
+    setSingleTestResultImage($('#linkchecker-state'), result.result);
     $('#linkchecker-placeholder').addClass('invisible');
     var hosts = result.info.hosts;
     $('#linkchecker-info').html((hosts.length > 0) ? 'Geprüfte Webseiten:' : 'Keine Links gefunden.').removeClass('invisible');
     for (var i = 0; i < hosts.length; i++) {
         var table = '';
-        var icon = 'fa-check-circle';
-        var color = 'text-success';
-        if (hosts[i].result == "SUSPICIOUS") {
+        if (hosts[i].result == "SUSPICIOUS")
             table = 'table-warning';
-            icon = 'fa-exclamation-triangle';
-            color = 'text-warning';
-        }
-        if (hosts[i].result == "MALICIOUS") {
+        if (hosts[i].result == "MALICIOUS")
             table = 'table-danger';
-            icon = 'fa-times-circle';
-            color = 'text-danger';
-        }
-        if (hosts[i].result == "UNDEFINED") {
-            icon = 'fa-question-circle';
-            color = 'text-muted';
-        }
-        $('#linkchecker-result').append('<tr class="' + table + '"><td><small>' + hosts[i].host + '</small></td><td><span class="fa ' + icon + ' ' + color + '"></span></td></tr>');
+        $('#linkchecker-result').append('<tr class="' + table + '"><td><small>' + hosts[i].host + '</small></td><td>' + getFontAwesomeResultSymbol(hosts[i].result) + '</td></tr>');
     }
     $('#linkchecker-result').removeClass('invisible');
 }
 
 function setCertificateCheckerResult(result) {
-    setResultMaliciousImage($('#certificatechecker-state'), result.result);
+    setSingleTestResultImage($('#certificatechecker-state'), result.result);
     $('#certificatechecker-placeholder').addClass('invisible');
-    $('#certificatechecker-info').html(result.info ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
-    if (result.info) {
+    $('#certificatechecker-info').html(result.info.certificate ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
+    if (result.info.certificate) {
         var certificate = result.info.certificate;
         if (result.result == 'MALICIOUS') {
-            $('#certificatechecker-result').append($('<p>').css('font-weight', 'bold').html(certificate.return_code));
+            $('#certificatechecker-result').append($('<p>').css('font-weight', 'bold').html('Fehler: ' + certificate.return_code));
         }
         var subject = $('<table>').addClass('table table-sm table-striped small');
         subject.append($('<tr>').append($('<th>').html('Name')).append($('<td>').html(certificate.subject.name)));
@@ -204,6 +189,62 @@ function setCertificateCheckerResult(result) {
     }
 }
 
+function setPhishingDetectorResult(result) {
+    setSingleTestResultImage($('#phishingdetector-state'), result.result);
+    $('#phishingdetector-placeholder').addClass('invisible');
+    $('#phishingdetector-info').html('<b>Schlagwörter:</b> ' + result.info.keywords.join(', ')).removeClass('invisible');
+    if (result.info.matches.length > 0) {
+        $('#phishingdetector-result').append($('<p>').html('Übereinstimmungen:'));
+        var matches = result.info.matches;
+        for (var i = 0; i < matches.length; i++) {
+            var match = matches[i];
+            $('#phishingdetector-result').append($('<p>').addClass('small').html($('<a>').attr({
+                'href': match.url,
+                'target': '_blank'
+            }).html(match.url)));
+            var match_result = $('<table>').addClass('table table-sm table-striped small no-margin');
+            match_result.append($('<tr>').append($('<th>').html('Resultat')).append($('<th>').html(getFontAwesomeResultSymbol(match.result))));
+            match_result.append($('<tr>').append($('<th>').html('Übereinstimmung')).append($('<th>').html((match.ratio * 100).toFixed(2) + ' %')));
+            match_result.append($('<tr>').append($('<td>').html('-> Inhalt')).append($('<td>').html((match.content_ratio * 100).toFixed(2) + ' %')));
+            match_result.append($('<tr>').append($('<td>').html('-> Quelltext')).append($('<td>').html((match.html_ratio * 100).toFixed(2) + ' %')));
+            match_result.append($('<tr>').append($('<td>').html('-> Aussehen')).append($('<td>').html((match.screenshot_ratio * 100).toFixed(2) + ' %')));
+            $('#phishingdetector-result').append(match_result);
+            var match_comparison = $('<div>').css({
+                'width': '100%',
+                'max-height': '400px',
+                'overflow': 'auto',
+                'border': '1px solid #eceeef',
+                'margin-bottom': '1rem'
+            }).html($('<img>').attr({
+                'src': match.comparison
+            }).css({
+                'display': 'block',
+                'margin': '0 auto',
+                'width': '100%'
+            }));
+            $('#phishingdetector-result').append(match_comparison);
+        }
+        $('#phishingdetector-result').removeClass('invisible');
+    }
+}
+
+function getFontAwesomeResultSymbol(result) {
+    var icon = 'fa-check-circle';
+    var color = 'text-success';
+    if (result == "SUSPICIOUS") {
+        icon = 'fa-exclamation-triangle';
+        color = 'text-warning';
+    }
+    if (result == "MALICIOUS") {
+        icon = 'fa-times-circle';
+        color = 'text-danger';
+    }
+    if (result == "UNDEFINED") {
+        icon = 'fa-question-circle';
+        color = 'text-muted';
+    }
+    return '<span class="fa ' + icon + ' ' + color + '"></span>';
+}
 
 function setResolvedResult(result) {
     if (result.reachable) {
@@ -214,7 +255,7 @@ function setResolvedResult(result) {
     }
 }
 
-function setResultMaliciousImage(element, result) {
+function setSingleTestResultImage(element, result) {
     element.attr('src', 'img/' + getResultImage(result));
 }
 

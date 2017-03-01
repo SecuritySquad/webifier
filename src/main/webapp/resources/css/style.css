@@ -137,3 +137,7 @@ fieldset[disabled] .btn-webifier.active {
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+.no-margin {
+    margin: 0;
+}

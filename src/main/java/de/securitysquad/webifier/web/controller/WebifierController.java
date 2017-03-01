@@ -43,9 +43,10 @@ public class WebifierController {
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public String redirectResultView(@RequestParam("url") String url, HttpSession session) {
+        String trimmedUrl = url.trim();
         UrlValidator validator = new UrlValidator(new String[]{"http", "https"});
-        if (validator.isValid(withProtocol(url))) {
-            launchTester(url, session);
+        if (validator.isValid(withProtocol(trimmedUrl))) {
+            launchTester(trimmedUrl, session);
             return "redirect:/checked";
         }
         session.setAttribute("error", "url_invalid");
