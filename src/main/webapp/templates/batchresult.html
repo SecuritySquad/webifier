@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <title >webifier</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/img/webifier.png"/>
+    <title>webifier - result</title>
+    <link id="favicon" rel="shortcut icon" type="image/x-icon" href="/img/webifier.png"/>
 
     <link rel="stylesheet" href="/lib/tether/dist/css/tether.min.css"/>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css"/>
@@ -15,24 +15,18 @@
 </head>
 <body>
 <th:block th:replace="page :: nav"/>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 offset-md-4">
-            <img class="webifier-logo mx-auto d-block" src="/img/webifier.png" alt="webifier"/>
-        </div>
-    </div>
-    <th:block th:replace="page :: errors"/>
+
+<div class="container mt-3">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <form id="webifier-search" th:action="@{/check}" method="post">
-                <div class="input-group input-group-lg">
-                    <input type="text" name="url" class="form-control input-webifier-search"
-                           placeholder="www.example.com" autofocus="autofocus"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-webifier" type="submit"><span class="fa fa-search"></span></button>
-                    </span>
-                </div>
-            </form>
+            <h2>Stapelverarbeitung:</h2>
+            <table class="table table-striped">
+                <tr th:each="item : ${started}">
+                    <td th:text="${item.key}">url</td>
+                    <td th:if="${item.value}"><span class="fa fa-check-circle text-success"></span></td>
+                    <td th:if="${!item.value}"><span class="fa fa-times-circle text-danger"></span></td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

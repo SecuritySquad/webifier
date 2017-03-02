@@ -8,6 +8,8 @@ public class WebifierConstants {
         public static final String HTTP_SESSION = "http_session";
         public static final String CHECK_URL = "check_url";
         public static final String CHECK_ID = "check_id";
+        public static final String ERROR = "error";
+        public static final String STARTED = "error";
     }
 
     public class Parameter {

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <title >webifier</title>
+    <title>webifier - batch</title>
     <link rel="shortcut icon" type="image/x-icon" href="/img/webifier.png"/>
 
     <link rel="stylesheet" href="/lib/tether/dist/css/tether.min.css"/>
@@ -15,23 +15,17 @@
 </head>
 <body>
 <th:block th:replace="page :: nav"/>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 offset-md-4">
-            <img class="webifier-logo mx-auto d-block" src="/img/webifier.png" alt="webifier"/>
-        </div>
-    </div>
+<div class="container mt-4">
     <th:block th:replace="page :: errors"/>
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <form id="webifier-search" th:action="@{/check}" method="post">
-                <div class="input-group input-group-lg">
-                    <input type="text" name="url" class="form-control input-webifier-search"
-                           placeholder="www.example.com" autofocus="autofocus"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-webifier" type="submit"><span class="fa fa-search"></span></button>
-                    </span>
-                </div>
+            <h2>Stapelverarbeitung:</h2>
+            <form id="webifier-batch" th:action="@{/batch/check}" method="post">
+                 <textarea name="urls" class="form-control input-webifier-batch"
+                           placeholder="www.example.com" rows="15" autofocus="autofocus"></textarea>
+                <button class="btn btn-lg btn-webifier pull-right" type="submit">Ausführen <span class="fa fa-play"></span></button>
+                <a id="open-batch-file" class="btn btn-lg btn-webifier pull-left" href="#">Datei öffnen <span class="fa fa-file-text-o"></span></a>
+                <input id="open-batch-file-input" type="file" class="hidden"/>
             </form>
         </div>
     </div>
@@ -43,5 +37,6 @@
 <script type="text/javascript" src="/lib/tether/dist/js/tether.min.js"></script>
 <script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/batch.js"></script>
 </body>
 </html>
