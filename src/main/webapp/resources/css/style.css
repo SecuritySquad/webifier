@@ -44,18 +44,22 @@ fieldset[disabled] .btn-webifier.active {
     background-color: #000000;
 }
 
-.input-webifier-search {
+.input-webifier-search,
+.input-webifier-batch {
     border-color: #FF8800 !important;
 }
 
-.input-webifier-search:hover {
+.input-webifier-search:hover,
+.input-webifier-batch:hover {
     -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
 }
 
 .input-webifier-search:focus,
-.input-webifier-search:active {
+.input-webifier-search:active,
+.input-webifier-batch:focus,
+.input-webifier-batch:active {
     -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
     box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
@@ -140,4 +144,12 @@ fieldset[disabled] .btn-webifier.active {
 
 .no-margin {
     margin: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.input-webifier-batch {
+    margin-bottom: 1rem;
 }

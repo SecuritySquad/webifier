@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static de.securitysquad.webifier.core.WebifierTesterState.*;
@@ -23,10 +20,11 @@ import static java.util.stream.Collectors.toList;
  */
 @Component
 public class WebifierTesterLauncher implements Runnable {
-    private final WebifierTesterConfig config;
+    private static final int MAX_QUEUE_SIZE = 150000;
 
-    private List<WebifierTester> queue;
-    private Thread testerProcessor;
+    private final WebifierTesterConfig config;
+    private final List<WebifierTester> queue;
+    private final Thread testerProcessor;
 
     @Autowired
     public WebifierTesterLauncher(WebifierConfig config) {
@@ -42,11 +40,25 @@ public class WebifierTesterLauncher implements Runnable {
         testerProcessor.interrupt();
     }
 
+    public synchronized String launch(String url) {
+        return launch(url, null, null);
+    }
+
     public synchronized String launch(String url, HttpSession session, WebifierTesterResultListener listener) {
+        if (queue.size() >= MAX_QUEUE_SIZE) {
+            return null;
+        }
+        if (queue.stream().anyMatch(test -> test.getUrl().equals(url))) {
+            return null;
+        }
         String id = UUID.randomUUID().toString();
         String command = config.getCommand().replace("#URL", url).replace("#ID", id);
-        queue.add(new WebifierTester(id, command, session, listener, config.getTimeout()));
+        queue.add(new WebifierTester(id, url, command, session, listener, config.getTimeout()));
         return id;
+    }
+
+    public synchronized int getQueueSize() {
+        return queue.size();
     }
 
     @Override
@@ -54,16 +66,18 @@ public class WebifierTesterLauncher implements Runnable {
         Predicate<? super WebifierTester> waiting = t -> t.getState() == WAITING;
         Predicate<? super WebifierTester> exited = t -> asList(FINISHED, ERROR).contains(t.getState());
         while (!testerProcessor.isInterrupted()) {
-            queue.stream().filter(exited).collect(toList()).forEach(t -> {
-                t.exit();
-                queue.remove(t);
-            });
-            List<WebifierTester> waitingTesters = queue.stream().filter(waiting).sorted(comparingLong(WebifierTester::getCreationIndex)).collect(toList());
-            for (int index = 0; index < waitingTesters.size(); index++) {
-                waitingTesters.get(index).setWaitingPosition(index + 1);
-            }
-            if (queue.stream().mapToInt(t -> t.getState() == RUNNING ? 1 : 0).sum() < config.getParallel()) {
-                queue.stream().filter(waiting).min(comparingLong(WebifierTester::getCreationIndex)).ifPresent(WebifierTester::launch);
+            synchronized (queue) {
+                queue.stream().filter(exited).collect(toList()).forEach(t -> {
+                    t.exit();
+                    queue.remove(t);
+                });
+                List<WebifierTester> waitingTesters = queue.stream().filter(waiting).sorted(comparingLong(WebifierTester::getCreationIndex)).collect(toList());
+                for (int index = 0; index < waitingTesters.size(); index++) {
+                    waitingTesters.get(index).setWaitingPosition(index + 1);
+                }
+                if (queue.stream().mapToInt(t -> t.getState() == RUNNING ? 1 : 0).sum() < config.getParallel()) {
+                    queue.stream().filter(waiting).min(comparingLong(WebifierTester::getCreationIndex)).ifPresent(WebifierTester::launch);
+                }
             }
             try {
                 Thread.sleep(500);

@@ -6,12 +6,15 @@
                     aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
             <div class="collapse navbar-toggleable-xs" id="navbarResponsive">
                 <a class="navbar-brand" href="/">
-                    <img src="img/webifier.png" width="30" height="30" class="d-inline-block align-top" alt="webifier"/>
+                    <img src="/img/webifier.png" width="30" height="30" class="d-inline-block align-top" alt="webifier"/>
                     webifier
                 </a>
                 <ul class="nav navbar-nav float-sm-right">
+                    <li id="queue-size-item" class="nav-item hidden">
+                        <div class="nav-link" href="#">Warteschlange: <span id="queue-size"></span></div>
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/batch">
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         </a>
                     </li>
@@ -28,6 +31,22 @@
         <footer class="container footer text-xs-center">
             <p>© <a target="_blank" href="https://www.securitysquad.de">SecuritySquad</a> 2016</p>
         </footer>
+    </th:block>
+    <th:block th:fragment="errors">
+        <div id="url-error-container" th:if="${#strings.equals('url_invalid', error)}" class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Bitte geben Sie eine gültige Domain ein!</strong>
+                </div>
+            </div>
+        </div>
+        <div id="queue-error-container" th:if="${#strings.equals('queue_full', error)}" class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Die Warteschlange ist zu groß! Bitte probieren Sie es später erneut.</strong>
+                </div>
+            </div>
+        </div>
     </th:block>
 </body>
 </html>

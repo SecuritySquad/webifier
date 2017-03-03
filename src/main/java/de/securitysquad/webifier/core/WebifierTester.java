@@ -21,20 +21,20 @@ public class WebifierTester {
     private final HttpSession session;
     private final WebifierTesterResultListener listener;
     private final int timeoutInMinutes;
-
     private WebifierTesterState state;
     private Process testerProcess;
     private Thread testerThread;
     private Thread inputThread;
     private Thread errorThread;
+    private String url;
 
-    public WebifierTester(String id, String command, HttpSession session, WebifierTesterResultListener listener, int timeoutInMinutes) {
+    public WebifierTester(String id, String url, String command, HttpSession session, WebifierTesterResultListener listener, int timeoutInMinutes) {
         creationIndex = System.currentTimeMillis();
         Assert.notNull(id, "id must not be null!");
+        Assert.notNull(url, "url must not be null!");
         Assert.notNull(command, "command must not be null!");
-        Assert.notNull(session, "session must not be null!");
-        Assert.notNull(listener, "listener must not be null!");
         this.id = id;
+        this.url = url;
         this.command = command;
         this.session = session;
         this.listener = listener;
@@ -44,28 +44,28 @@ public class WebifierTester {
 
     public void launch() {
         state = WebifierTesterState.RUNNING;
-        listener.onStarted(session, id);
+        fireStartedEvent();
         testerThread = new Thread(() -> {
             try {
                 System.out.println(command);
                 testerProcess = Runtime.getRuntime().exec(command);
-                listenForInput(testerProcess.getInputStream(), session, listener);
-                listenForError(testerProcess.getErrorStream(), session, listener);
+                listenForInput(testerProcess.getInputStream());
+                listenForError(testerProcess.getErrorStream());
                 testerProcess.waitFor(timeoutInMinutes, TimeUnit.MINUTES);
                 state = (testerProcess.exitValue() == 0) ? WebifierTesterState.FINISHED : WebifierTesterState.ERROR;
             } catch (IOException | InterruptedException e) {
                 state = WebifierTesterState.ERROR;
-                listener.onError(session, ExceptionUtils.getStackTrace(e));
+                fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
         });
         testerThread.start();
     }
 
     public void setWaitingPosition(int waitingPosition) {
-        listener.onWaitingPositionChanged(session, id, waitingPosition);
+        fireWaitingPositionEvent(waitingPosition);
     }
 
-    private void listenForInput(InputStream inputStream, HttpSession session, WebifierTesterResultListener listener) {
+    private void listenForInput(InputStream inputStream) {
         inputThread = new Thread(() -> {
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             ObjectMapper mapper = new ObjectMapper();
@@ -76,31 +76,31 @@ public class WebifierTester {
                     try {
                         WebifierTesterResult result = mapper.readValue(line, WebifierTesterResult.class);
                         result.setContent(line);
-                        listener.onTestResult(session, result.getLaunchId(), result);
+                        fireTestResultEvent(result);
                     } catch (IOException e) {
                         // no json line found
                     }
                 }
             } catch (IOException e) {
                 state = WebifierTesterState.ERROR;
-                listener.onError(session, ExceptionUtils.getStackTrace(e));
+                fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
         });
         inputThread.setDaemon(true);
         inputThread.start();
     }
 
-    private void listenForError(InputStream errorStream, HttpSession session, WebifierTesterResultListener listener) {
+    private void listenForError(InputStream errorStream) {
         errorThread = new Thread(() -> {
             BufferedReader br = new BufferedReader(new InputStreamReader(errorStream));
             try {
                 String line;
                 while ((line = br.readLine()) != null && !errorThread.isInterrupted()) {
-                    listener.onError(session, line);
+                    fireErrorEvent(line);
                 }
             } catch (IOException e) {
                 state = WebifierTesterState.ERROR;
-                listener.onError(session, ExceptionUtils.getStackTrace(e));
+                fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
         });
         errorThread.setDaemon(true);
@@ -109,6 +109,14 @@ public class WebifierTester {
 
     public WebifierTesterState getState() {
         return state;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public long getCreationIndex() {
@@ -128,6 +136,31 @@ public class WebifierTester {
         if (errorThread.isAlive()) {
             errorThread.interrupt();
         }
-        listener.onFinished(session, id);
+        fireFinishedEvent();
+    }
+
+    private void fireWaitingPositionEvent(int waitingPosition) {
+        if (listener != null && session != null)
+            listener.onWaitingPositionChanged(session, id, waitingPosition);
+    }
+
+    private void fireStartedEvent() {
+        if (listener != null && session != null)
+            listener.onStarted(session, id);
+    }
+
+    private void fireErrorEvent(String error) {
+        if (listener != null && session != null)
+            listener.onError(session, error);
+    }
+
+    private void fireTestResultEvent(WebifierTesterResult result) {
+        if (listener != null && session != null)
+            listener.onTestResult(session, result.getLaunchId(), result);
+    }
+
+    private void fireFinishedEvent() {
+        if (listener != null && session != null)
+            listener.onFinished(session, id);
     }
 }

@@ -176,8 +176,8 @@ function setLinkCheckerResult(result) {
 function setCertificateCheckerResult(result) {
     setSingleTestResultImage($('#certificatechecker-state'), result.result);
     $('#certificatechecker-placeholder').addClass('invisible');
-    $('#certificatechecker-info').html(result.info.certificate ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
-    if (result.info.certificate) {
+    $('#certificatechecker-info').html((result.info && result.info.certificate) ? 'Zertifikat:' : 'Kein Zertifikat gefunden!').removeClass('invisible');
+    if (result.info && result.info.certificate) {
         var certificate = result.info.certificate;
         if (result.result == 'MALICIOUS') {
             $('#certificatechecker-result').append($('<p>').css('font-weight', 'bold').html('Fehler: ' + certificate.return_code));

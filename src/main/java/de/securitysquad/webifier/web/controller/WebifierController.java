@@ -33,10 +33,10 @@ public class WebifierController {
     @RequestMapping("/")
     public ModelAndView returnIndexView(HttpSession session) {
         ModelAndView result = new ModelAndView("index");
-        Object error = session.getAttribute("error");
+        Object error = session.getAttribute(WebifierConstants.Session.ERROR);
         if (error != null) {
             result.addObject("error", error);
-            session.removeAttribute("error");
+            session.removeAttribute(WebifierConstants.Session.ERROR);
         }
         return result;
     }
@@ -46,17 +46,23 @@ public class WebifierController {
         String trimmedUrl = url.trim();
         UrlValidator validator = new UrlValidator(new String[]{"http", "https"});
         if (validator.isValid(withProtocol(trimmedUrl))) {
-            launchTester(trimmedUrl, session);
+            if (!launchTester(trimmedUrl, session)) {
+                session.setAttribute(WebifierConstants.Session.ERROR, "queue_full");
+                return "redirect:/";
+            }
             return "redirect:/checked";
         }
-        session.setAttribute("error", "url_invalid");
+        session.setAttribute(WebifierConstants.Session.ERROR, "url_invalid");
         return "redirect:/";
     }
 
-    private void launchTester(String url, HttpSession session) {
+    private boolean launchTester(String url, HttpSession session) {
         String id = webifierTesterLauncher.launch(url, session, checkController);
+        if (id == null)
+            return false;
         session.setAttribute(WebifierConstants.Session.CHECK_URL, url);
         session.setAttribute(WebifierConstants.Session.CHECK_ID, id);
+        return true;
     }
 
     private String withProtocol(String url) {
