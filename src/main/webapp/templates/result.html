@@ -183,6 +183,29 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header" id="heading-ipscan">
+                    <a data-toggle="collapse" href="#collapse-ipscan" aria-expanded="false"
+                       aria-controls="collapse-ipscan">
+                        <img id="ipscan-state" class="float-xs-right test-state" src="img/undefined.png"/>
+                        <h5 class="mb-0">Überprüfung der IP-Nutzung</h5>
+                    </a>
+                </div>
+
+                <div id="collapse-ipscan" class="collapse" aria-labelledby="heading-ipscan">
+                    <div class="card-block">
+                        <span id="ipscan-placeholder">…</span>
+                        <p id="ipscan-info" class="invisible"></p>
+                        <table id="ipscan-result" class="table table-sm table-striped invisible">
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <th:block th:replace="page :: footer"/>

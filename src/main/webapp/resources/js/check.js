@@ -55,6 +55,9 @@ function setTestLoading(event) {
         case 'PortScan':
             $('#portscan-state').attr('src', 'img/loading.gif');
             break;
+        case 'IpScan':
+            $('#ipscan-state').attr('src', 'img/loading.gif');
+            break;
         case 'HeaderInspection':
             $('#header-inspection-state').attr('src', 'img/loading.gif');
             break;
@@ -78,6 +81,9 @@ function setTestResult(event) {
             break;
         case 'PortScan':
             setPortScanResult(event.result);
+            break;
+        case 'IpScan':
+            setIpScanResult(event.result);
             break;
         case 'HeaderInspection':
             setHeaderInspectionResult(event.result);
@@ -116,7 +122,7 @@ function setPortScanResult(result) {
     setSingleTestResultImage($('#portscan-state'), result.result);
     $('#portscan-placeholder').addClass('invisible');
     var $portscan_info = $('#portscan-info');
-    $portscan_info.html('Keine verdächtigen Ports gefunden.').removeClass('invisible');
+    $portscan_info.html('Keine verdächtigen Portabfragen gefunden.').removeClass('invisible');
     var unknown_ports = result.info.unknown_ports;
     if (unknown_ports.length > 0) {
         $portscan_info.html('Folgende verdächtige Ports wurden abgefragt:');
@@ -125,6 +131,22 @@ function setPortScanResult(result) {
             $portscan_result.append('<tr><td>' + unknown_ports[i] + '</td></tr>');
         }
         $portscan_result.removeClass('invisible');
+    }
+}
+
+function setIpScanResult(result) {
+    setSingleTestResultImage($('#ipscan-state'), result.result);
+    $('#ipscan-placeholder').addClass('invisible');
+    var $ipscan_info = $('#ipscan-info');
+    $ipscan_info.html('Keine verdächtigen IP-Abfragen gefunden.').removeClass('invisible');
+    var risky_hosts = result.info.risky_hosts;
+    if (risky_hosts.length > 0) {
+        $ipscan_info.html('Folgende verdächtige IPs wurden abgefragt:');
+        var $ipscan_result = $('#ipscan-result');
+        for (var i = 0; i < risky_hosts.length; i++) {
+            $ipscan_result.append('<tr><td>' + risky_hosts[i] + '</td></tr>');
+        }
+        $ipscan_result.removeClass('invisible');
     }
 }
 
