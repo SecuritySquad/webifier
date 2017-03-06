@@ -40,7 +40,8 @@ function executeEvent(event) {
             setTestResult(event);
             break;
         case 'TesterFinished':
-            setResultMalicious(event.result);
+            setResultImage(event.result);
+            setAllRunningTestsUndefined();
             break;
         default:
             break;
@@ -66,6 +67,7 @@ function setTestLoading(event) {
             break;
         case 'CertificateChecker':
             $('#certificatechecker-state').attr('src', 'img/loading.gif');
+            break;
         case 'PhishingDetector':
             $('#phishingdetector-state').attr('src', 'img/loading.gif');
             break;
@@ -273,7 +275,7 @@ function setResolvedResult(result) {
         $('#resolved-url').html(result.resolved);
     } else {
         $('#resolved-url').html("Nicht erreichbar!");
-        $('#test-state').attr('src', 'img/webifier.png');
+        $('#test-state').attr('src', '/img/webifier.png');
     }
 }
 
@@ -281,10 +283,14 @@ function setSingleTestResultImage(element, result) {
     element.attr('src', 'img/' + getResultImage(result));
 }
 
-function setResultMalicious(result) {
+function setResultImage(result) {
     $('#heading-log').css('background-color', '#f5f5f5');
-    $("#favicon").attr('href', 'img/webifier-' + getResultImage(result));
-    $('#test-state').attr('src', 'img/webifier-' + getResultImage(result));
+    $("#favicon").attr('href', '/img/webifier-' + getResultImage(result));
+    $('#test-state').attr('src', '/img/webifier-' + getResultImage(result));
+}
+
+function setAllRunningTestsUndefined() {
+    $('img[src="/img/loading.gif"]').attr('src', '/img/undefined.png');
 }
 
 function getResultImage(result) {
