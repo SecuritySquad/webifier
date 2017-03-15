@@ -114,9 +114,11 @@ function setScreenshotResult(result) {
     setSingleTestResultImage($('#screenshot-state'), result.result);
     $('#screenshot-placeholder').addClass('invisible');
     var base64img = result.info.base64img;
-    var image = new Image();
-    image.src = "data:image/png;base64,"+base64img;
-    $('#screenshot-block').appendChild(image);
+    $('#screenshot-block').append($('<img>').css({
+        'display': 'block',
+        'margin': '0 auto',
+        'border': '1px solid rgba(0, 0, 0, 0.125)'
+    }).attr('src', base64img));
 }
 
 function setVirusScanResult(result) {
