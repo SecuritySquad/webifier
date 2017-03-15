@@ -58,7 +58,7 @@ public class WebifierTesterLauncher implements Runnable {
     }
 
     public synchronized int getQueueSize() {
-        return queue.size();
+        return (int) queue.stream().filter(t -> t.getState() == WAITING).count();
     }
 
     @Override
