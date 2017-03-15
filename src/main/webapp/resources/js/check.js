@@ -69,6 +69,9 @@ function setTestLoading(event) {
         case 'PhishingDetector':
             $('#phishingdetector-state').attr('src', 'img/loading.gif');
             break;
+        case 'Screenshot':
+            $('#screenshot-state').attr('src', 'img/loading.gif');
+            break;
         default:
             break;
     }
@@ -97,9 +100,21 @@ function setTestResult(event) {
         case 'PhishingDetector':
             setPhishingDetectorResult(event.result);
             break;
+        case 'Screenshot':
+            setScreenshotResult(event.result);
+            break;
         default:
             break;
     }
+}
+
+function setScreenshotResult(result) {
+    setSingleTestResultImage($('#screenshot-state'), result.result);
+    $('#screenshot-placeholder').addClass('invisible');
+    var base64img = result.info.base64img;
+    var image = new Image();
+    image.src = "data:image/png;base64,"+base64img;
+    $('#screenshot-block').appendChild(image);
 }
 
 function setVirusScanResult(result) {
