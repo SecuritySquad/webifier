@@ -117,7 +117,8 @@ function setScreenshotResult(result) {
     $('#screenshot-block').append($('<img>').css({
         'display': 'block',
         'margin': '0 auto',
-        'border': '1px solid rgba(0, 0, 0, 0.125)'
+        'border': '1px solid rgba(0, 0, 0, 0.125)',
+        'max-width': '100%'
     }).attr('src', base64img));
 }
 
