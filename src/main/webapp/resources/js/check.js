@@ -172,7 +172,7 @@ function setIpScanResult(result) {
 function setHeaderInspectionResult(result) {
     setSingleTestResultImage($('#header-inspection-state'), result.result);
     $('#header-inspection-placeholder').addClass('invisible');
-    var resultText = (result.info.malicious) ? "HTML-Antworten stimmen nicht überein" : "HTML-Antworten stimmen überein";
+    var resultText = (result.result == "SUSPICIOUS") ? "HTML-Antworten stimmen nicht überein" : "HTML-Antworten stimmen überein";
     $('#header-inspection-info').html(resultText).removeClass('invisible');
 }
 
