@@ -1,14 +1,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block th:fragment="nav">
-    <nav class="navbar navbar-light bg-faded">
-        <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+    <nav class="navbar navbar-fixed-top navbar-light bg-faded">
+        <a class="navbar-brand" href="/">
+            <img src="/img/webifier-small.png" class="d-inline-block align-top" alt="webifier"/>
+            webifier
+        </a>
+        <button class="navbar-toggler hidden-sm-up float-xs-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
         <div class="collapse navbar-toggleable-xs" id="navbarResponsive">
-            <a class="navbar-brand" href="/">
-                <img src="/img/webifier-small.png" class="d-inline-block align-top" alt="webifier"/>
-                webifier
-            </a>
             <ul class="nav navbar-nav float-sm-right">
                 <li id="queue-size-item" class="nav-item hidden">
                     <div class="nav-link" href="#">Warteschlange: <span id="queue-size"></span></div>

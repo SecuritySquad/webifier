@@ -1,3 +1,15 @@
+body {
+    padding-top: 56px;
+}
+
+.navbar-toggleable-xs {
+    margin-top: 48px;
+}
+
+.navbar-nav {
+    margin-top: 0 !important;
+}
+
 .btn-webifier {
     color: #000000;
     background-color: #FFA300;
