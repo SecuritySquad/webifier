@@ -52,8 +52,10 @@ public class WebifierTester {
                 listenForInput(testerProcess.getInputStream());
                 listenForError(testerProcess.getErrorStream());
                 testerProcess.waitFor(timeoutInMinutes, TimeUnit.MINUTES);
+                if (testerProcess.isAlive())
+                    testerProcess.destroyForcibly();
                 state = (testerProcess.exitValue() == 0) ? WebifierTesterState.FINISHED : WebifierTesterState.ERROR;
-            } catch (IOException | InterruptedException e) {
+            } catch (Exception e) {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
@@ -81,7 +83,7 @@ public class WebifierTester {
                         // no json line found
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
@@ -98,7 +100,7 @@ public class WebifierTester {
                 while ((line = br.readLine()) != null && !errorThread.isInterrupted()) {
                     fireErrorEvent(line);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
