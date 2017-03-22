@@ -56,9 +56,6 @@ public class WebifierTester {
             } catch (Exception e) {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
-            } finally {
-                if (testerProcess != null)
-                    testerProcess.destroyForcibly();
             }
         });
         testerThread.start();
@@ -128,7 +125,7 @@ public class WebifierTester {
 
     public void exit() {
         if (testerProcess.isAlive()) {
-            testerProcess.destroy();
+            testerProcess.destroyForcibly();
         }
         if (testerThread.isAlive()) {
             testerThread.interrupt();
