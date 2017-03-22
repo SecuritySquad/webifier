@@ -52,12 +52,13 @@ public class WebifierTester {
                 listenForInput(testerProcess.getInputStream());
                 listenForError(testerProcess.getErrorStream());
                 testerProcess.waitFor(timeoutInMinutes, TimeUnit.MINUTES);
-                if (testerProcess.isAlive())
-                    testerProcess.destroyForcibly();
                 state = (testerProcess.exitValue() == 0) ? WebifierTesterState.FINISHED : WebifierTesterState.ERROR;
             } catch (Exception e) {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
+            } finally {
+                if (testerProcess != null)
+                    testerProcess.destroyForcibly();
             }
         });
         testerThread.start();
