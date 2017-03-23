@@ -40,6 +40,7 @@ public class WebifierTester {
         this.listener = listener;
         this.timeoutInMinutes = timeoutInMinutes;
         state = WebifierTesterState.WAITING;
+        System.out.println("Tester: " + id);
     }
 
     public void launch() {
@@ -47,7 +48,7 @@ public class WebifierTester {
         fireStartedEvent();
         testerThread = new Thread(() -> {
             try {
-                System.out.println(command);
+//                System.out.println(command);
                 testerProcess = Runtime.getRuntime().exec(command);
                 listenForInput(testerProcess.getInputStream());
                 listenForError(testerProcess.getErrorStream());
@@ -72,7 +73,7 @@ public class WebifierTester {
             try {
                 String line;
                 while ((line = br.readLine()) != null && !inputThread.isInterrupted()) {
-                    System.out.println(line);
+//                    System.out.println(line);
                     try {
                         WebifierTesterResult result = mapper.readValue(line, WebifierTesterResult.class);
                         result.setContent(line);
