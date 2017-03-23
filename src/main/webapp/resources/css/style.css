@@ -2,7 +2,7 @@ body {
     padding-top: 56px;
 }
 
-.navbar-toggleable-xs {
+.navbar-toggleable-xs.in, .navbar-toggleable-xs.collapsing {
     margin-top: 48px;
 }
 

@@ -57,7 +57,7 @@ public class WebifierTester {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
-        });
+        }, "Tester_" + id);
         testerThread.start();
     }
 
@@ -85,7 +85,7 @@ public class WebifierTester {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
-        });
+        }, "Tester-Input_" + id);
         inputThread.setDaemon(true);
         inputThread.start();
     }
@@ -102,7 +102,7 @@ public class WebifierTester {
                 state = WebifierTesterState.ERROR;
                 fireErrorEvent(ExceptionUtils.getStackTrace(e));
             }
-        });
+        }, "Tester-Error_" + id);
         errorThread.setDaemon(true);
         errorThread.start();
     }
