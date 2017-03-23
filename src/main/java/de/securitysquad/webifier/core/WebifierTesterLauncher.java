@@ -70,7 +70,6 @@ public class WebifierTesterLauncher implements Runnable {
                 queue.stream().filter(exited).collect(toList()).forEach(t -> {
                     t.exit();
                     queue.remove(t);
-                    Runtime.getRuntime().gc();
                 });
                 List<WebifierTester> waitingTesters = queue.stream().filter(waiting).sorted(comparingLong(WebifierTester::getCreationIndex)).collect(toList());
                 for (int index = 0; index < waitingTesters.size(); index++) {
@@ -80,6 +79,7 @@ public class WebifierTesterLauncher implements Runnable {
                     queue.stream().filter(waiting).min(comparingLong(WebifierTester::getCreationIndex)).ifPresent(WebifierTester::launch);
                 }
             }
+            Runtime.getRuntime().gc();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
