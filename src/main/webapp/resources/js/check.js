@@ -2,6 +2,9 @@
  * Created by samuel on 02.11.16.
  */
 var client = Stomp.over(new SockJS('/connect'));
+client.debug = function (message) {
+//  no debug
+};
 client.connect(getHeader(), function (frame) {
     console.log(frame);
     client.subscribe('/user/started', function (payload) {
@@ -74,7 +77,8 @@ function setTestLoading(event) {
         case 'Screenshot':
             $('#screenshot-state').attr('src', 'img/loading.gif');
             break;
-        default:
+        case 'GoogleSafeBrowsing':
+            $('#google-safe-browsing-state').attr('src', 'img/loading.gif');
             break;
     }
 }
@@ -105,7 +109,8 @@ function setTestResult(event) {
         case 'Screenshot':
             setScreenshotResult(event.result);
             break;
-        default:
+        case 'GoogleSafeBrowsing':
+            setGoogleSafeBrowsingResult(event.result);
             break;
     }
 }
@@ -173,8 +178,19 @@ function setIpScanResult(result) {
 function setHeaderInspectionResult(result) {
     setSingleTestResultImage($('#header-inspection-state'), result.result);
     $('#header-inspection-placeholder').addClass('invisible');
-    var resultText = (result.result == "SUSPICIOUS") ? "HTML-Antworten stimmen nicht überein" : "HTML-Antworten stimmen überein";
-    $('#header-inspection-info').html(resultText).removeClass('invisible');
+    var info = $('<table>').addClass('table table-sm table-striped small');
+    info.append($('<tr>').append($('<th>').html('Durchschnittliche Abweichung:'))
+        .append($('<td>').html(result.info.medianDiff + ' Zeichen'))
+        .append($('<td>').html(((1 - result.info.medianRatio) * 100).toFixed(2) + ' %')));
+    info.append($('<tr>').append($('<th>').html('Maximale Abweichung:'))
+        .append($('<td>').html(result.info.worstDiff + ' Zeichen'))
+        .append($('<td>').html(((1 - result.info.worstRatio) * 100).toFixed(2) + ' %')));
+    var list = $('<ul>').addClass('list-group small');
+    var browsers = result.info.browsers;
+    for (var i = 0; i < browsers.length; i++) {
+        list.append($('<li>').addClass('list-group-item').html(browsers[i]));
+    }
+    $('#header-inspection-info').append(info).append($('<p>').html("Geprüfte Systeme:")).append(list).removeClass('invisible');
 }
 
 function setLinkCheckerResult(result) {
@@ -267,6 +283,21 @@ function setPhishingDetectorResult(result) {
             $('#phishingdetector-result').append(match_comparison);
         }
         $('#phishingdetector-result').removeClass('invisible');
+    }
+}
+
+function setGoogleSafeBrowsingResult(result) {
+    setSingleTestResultImage($('#google-safe-browsing-state'), result.result);
+    $('#google-safe-browsing-placeholder').addClass('invisible');
+    var list = $('<ul>').addClass('list-group small');
+    var matches = result.info.matches;
+    if (matches.length > 0) {
+        for (var i = 0; i < matches.length; i++) {
+            list.append($('<li>').addClass('list-group-item').html(matches[i]));
+        }
+        $('#google-safe-browsing-info').append($('<p>').html("Gefundene Bedrohungen:")).append(list).removeClass('invisible');
+    } else {
+        $('#google-safe-browsing-info').append($('<p>').html("Keine Bedrohungen gefunden.")).removeClass('invisible');
     }
 }
 

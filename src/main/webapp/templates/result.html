@@ -77,6 +77,27 @@
         </div>
         <div class="col-md-6">
             <div class="card">
+                <div class="card-header" id="heading-header-inspection">
+                    <a data-toggle="collapse" href="#collapse-header-inspection"
+                       aria-expanded="false"
+                       aria-controls="collapse-header-inspection">
+                        <img id="header-inspection-state" class="float-xs-right test-state" src="/img/undefined.png"/>
+                        <h5 class="mb-0">Vergleich in verschiedenen Browsern</h5>
+                    </a>
+                </div>
+
+                <div id="collapse-header-inspection" class="collapse" aria-labelledby="heading-header-inspection">
+                    <div class="card-block">
+                        <span id="header-inspection-placeholder">…</span>
+                        <p id="header-inspection-info" class="invisible"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
                 <div class="card-header" id="heading-portscan">
                     <a data-toggle="collapse" href="#collapse-portscan" aria-expanded="false"
                        aria-controls="collapse-portscan">
@@ -96,27 +117,29 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header" id="heading-header-inspection">
-                    <a data-toggle="collapse" href="#collapse-header-inspection"
-                       aria-expanded="false"
-                       aria-controls="collapse-header-inspection">
-                        <img id="header-inspection-state" class="float-xs-right test-state" src="/img/undefined.png"/>
-                        <h5 class="mb-0">Vergleich in verschiedenen Browsern</h5>
+                <div class="card-header" id="heading-ipscan">
+                    <a data-toggle="collapse" href="#collapse-ipscan" aria-expanded="false"
+                       aria-controls="collapse-ipscan">
+                        <img id="ipscan-state" class="float-xs-right test-state" src="/img/undefined.png"/>
+                        <h5 class="mb-0">Überprüfung der IP-Nutzung</h5>
                     </a>
                 </div>
 
-                <div id="collapse-header-inspection" class="collapse" aria-labelledby="heading-header-inspection">
+                <div id="collapse-ipscan" class="collapse" aria-labelledby="heading-ipscan">
                     <div class="card-block">
-                        <span id="header-inspection-placeholder">…</span>
-                        <p id="header-inspection-info" class="invisible"></p>
+                        <span id="ipscan-placeholder">…</span>
+                        <p id="ipscan-info" class="invisible"></p>
+                        <table id="ipscan-result" class="table table-sm table-striped invisible">
+
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header" id="heading-linkchecker">
@@ -132,6 +155,27 @@
                         <span id="linkchecker-placeholder">…</span>
                         <p id="linkchecker-info" class="invisible"></p>
                         <table id="linkchecker-result" class="table table-sm table-striped invisible">
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header" id="heading-google-safe-browsing">
+                    <a data-toggle="collapse" href="#collapse-google-safe-browsing" aria-expanded="false"
+                       aria-controls="collapse-google-safe-browsing">
+                        <img id="google-safe-browsing-state" class="float-xs-right test-state" src="/img/undefined.png"/>
+                        <h5 class="mb-0">Google Safe Browsing</h5>
+                    </a>
+                </div>
+
+                <div id="collapse-google-safe-browsing" class="collapse" aria-labelledby="heading-google-safe-browsing">
+                    <div class="card-block">
+                        <span id="google-safe-browsing-placeholder">…</span>
+                        <p id="google-safe-browsing-info" class="invisible"></p>
+                        <table id="google-safe-browsing-result" class="table table-sm table-striped invisible">
 
                         </table>
                     </div>
@@ -178,29 +222,6 @@
                         <div id="phishingdetector-result" class="invisible">
 
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header" id="heading-ipscan">
-                    <a data-toggle="collapse" href="#collapse-ipscan" aria-expanded="false"
-                       aria-controls="collapse-ipscan">
-                        <img id="ipscan-state" class="float-xs-right test-state" src="/img/undefined.png"/>
-                        <h5 class="mb-0">Überprüfung der IP-Nutzung</h5>
-                    </a>
-                </div>
-
-                <div id="collapse-ipscan" class="collapse" aria-labelledby="heading-ipscan">
-                    <div class="card-block">
-                        <span id="ipscan-placeholder">…</span>
-                        <p id="ipscan-info" class="invisible"></p>
-                        <table id="ipscan-result" class="table table-sm table-striped invisible">
-
-                        </table>
                     </div>
                 </div>
             </div>
