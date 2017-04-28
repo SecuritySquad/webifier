@@ -125,16 +125,16 @@ public class WebifierTester {
     }
 
     public void exit() {
-        if (testerProcess.isAlive()) {
+        if (testerProcess != null && testerProcess.isAlive()) {
             testerProcess.destroyForcibly();
         }
-        if (testerThread.isAlive()) {
+        if (testerThread != null && testerThread.isAlive()) {
             testerThread.interrupt();
         }
-        if (inputThread.isAlive()) {
+        if (inputThread != null && inputThread.isAlive()) {
             inputThread.interrupt();
         }
-        if (errorThread.isAlive()) {
+        if (errorThread != null && errorThread.isAlive()) {
             errorThread.interrupt();
         }
         fireFinishedEvent();
